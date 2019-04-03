@@ -118,7 +118,7 @@ class Window(QMainWindow):
 
 		self.dist.setText(str(self.distance))
 
-		print('yolo')
+
 
 	# lst=[]
     
