@@ -4,7 +4,7 @@ from PyQt5.QtCore import QSize, Qt, pyqtSlot
 from PyQt5.uic import loadUi
 from PyQt5.QtGui import QPixmap, QPen, QBrush
 import qosm
-import sys
+import sys, math
 from PIL import Image, ExifTags, ImageDraw
 from qosm.common import QOSM
 
@@ -78,7 +78,7 @@ class Window(QMainWindow):
 		if t > 1: 
 			self.scene.addLine(*self.canvas_coords[t-2], *self.canvas_coords[t-1], QPen(QtCore.Qt.red))
 			M1, M2 = self.canvas_coords[:2]
-			self.Len_line = (M2[0]-M1[0])**2+(M2[1]-M2[1])**2
+			self.Len_line = math.sqrt(M2[0]-M1[0])**2+(M2[1]-M2[1])**2
 			self.canvas_coords = []
 			self.drawingEnabled = False
 			self.mark.setText(self.states[self.drawingEnabled])
