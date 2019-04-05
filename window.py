@@ -92,7 +92,6 @@ class Window(QMainWindow):
 	def on_clear_clicked(self):
 		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
 		self.canvas_coords = []
-		self.load_image(self.filePath)
 
 
 	def onMarkerRClick(self, key, lat, lng):
