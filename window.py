@@ -69,6 +69,7 @@ class Window(QMainWindow):
 		self.photo.mousePressEvent = self.drawmode
 
 	def drawmode(self, event):
+		
 		if not self.drawingEnabled: return
 		x = event.x()+self.photo.horizontalScrollBar().sliderPosition()
 		y = event.y()
@@ -78,7 +79,8 @@ class Window(QMainWindow):
 		if t > 1: 
 			self.scene.addLine(*self.canvas_coords[t-2], *self.canvas_coords[t-1], QPen(QtCore.Qt.red))
 			M1, M2 = self.canvas_coords[:2]
-			self.Len_line = math.sqrt(M2[0]-M1[0])**2+(M2[1]-M2[1])**2
+			self.Len_line = math.sqrt((M2[0]-M1[0])**2+(M2[1]-M1[1])**2)
+			print(self.Len_line)
 			self.canvas_coords = []
 			self.drawingEnabled = False
 			self.mark.setText(self.states[self.drawingEnabled])
