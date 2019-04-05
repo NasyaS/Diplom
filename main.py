@@ -29,7 +29,7 @@ def calculate():
     FocalLength = 5.4	
     # print("Фокусное расстояние = "+str(FocalLength)+" мм, что равно = " + str(FocalLength/1000) +" м ")
 
-    Len_line = 500
+    Len_line = 1500
     # print("Длина отрезка = "+str(Len_line)+" пикс.")
 
     # print (f"Высота изобр. ="+str(height)+" пикс.")
