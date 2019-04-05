@@ -6,177 +6,232 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>688</height>
+    <width>818</width>
+    <height>718</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>OpenStreetMap</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="go">
+   <widget class="QWidget" name="horizontalLayoutWidget">
     <property name="geometry">
      <rect>
-      <x>500</x>
-      <y>220</y>
-      <width>191</width>
-      <height>23</height>
+      <x>9</x>
+      <y>-1</y>
+      <width>811</width>
+      <height>671</height>
      </rect>
     </property>
-    <property name="text">
-     <string>calc</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="height">
-    <property name="geometry">
-     <rect>
-      <x>530</x>
-      <y>90</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>90</y>
-      <width>47</width>
-      <height>13</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>высота</string>
-    </property>
-   </widget>
-   <widget class="QComboBox" name="matrix">
-    <property name="geometry">
-     <rect>
-      <x>540</x>
-      <y>150</y>
-      <width>101</width>
-      <height>22</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_2">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>150</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>размер матрицы</string>
-    </property>
-   </widget>
-   <widget class="QLineEdit" name="path">
-    <property name="geometry">
-     <rect>
-      <x>510</x>
-      <y>40</y>
-      <width>113</width>
-      <height>20</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_3">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>40</y>
-      <width>111</width>
-      <height>16</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>путь до файла</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="btnpath">
-    <property name="geometry">
-     <rect>
-      <x>630</x>
-      <y>40</y>
-      <width>31</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>PushButton</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_4">
-    <property name="geometry">
-     <rect>
-      <x>420</x>
-      <y>280</y>
-      <width>181</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Расстояние:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="dist">
-    <property name="geometry">
-     <rect>
-      <x>610</x>
-      <y>290</y>
-      <width>141</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QTabWidget" name="tabWidget">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>20</y>
-      <width>361</width>
-      <height>551</height>
-     </rect>
-    </property>
-    <property name="currentIndex">
-     <number>0</number>
-    </property>
-    <widget class="QWidget" name="tabPhoto">
-     <attribute name="title">
-      <string>Фотография</string>
-     </attribute>
-     <widget class="QGraphicsView" name="photo">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>355</width>
-        <height>525</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="tabMap">
-     <attribute name="title">
-      <string>Карта</string>
-     </attribute>
-     <widget class="QOSM" name="view" native="true">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>351</width>
-        <height>531</height>
-       </rect>
-      </property>
-     </widget>
-    </widget>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QLabel" name="label_3">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Путь до файла</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
+         <property name="spacing">
+          <number>5</number>
+         </property>
+         <item>
+          <widget class="QLineEdit" name="path">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QPushButton" name="btnpath">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>23</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Обзор</string>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_3">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Высота</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="height">
+         <property name="text">
+          <string>0</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>20</height>
+          </size>
+         </property>
+         <property name="text">
+          <string>Размер матрицы</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QComboBox" name="matrix"/>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="mark">
+         <property name="text">
+          <string>Режим разметки</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="clear">
+         <property name="text">
+          <string>Очистить</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QFrame" name="frame_2">
+         <property name="frameShape">
+          <enum>QFrame::StyledPanel</enum>
+         </property>
+         <property name="frameShadow">
+          <enum>QFrame::Raised</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="go">
+         <property name="text">
+          <string>Расчёт</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="label_4">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Расстояние:</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="dist">
+           <property name="maximumSize">
+            <size>
+             <width>16777215</width>
+             <height>20</height>
+            </size>
+           </property>
+           <property name="text">
+            <string/>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QTabWidget" name="tabWidget">
+       <property name="minimumSize">
+        <size>
+         <width>600</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="currentIndex">
+        <number>0</number>
+       </property>
+       <widget class="QWidget" name="tabPhoto">
+        <attribute name="title">
+         <string>Фотография</string>
+        </attribute>
+        <widget class="QGraphicsView" name="photo">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>601</width>
+           <height>641</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+       <widget class="QWidget" name="tabMap">
+        <attribute name="title">
+         <string>Карта</string>
+        </attribute>
+        <widget class="QOSM" name="view" native="true">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>591</width>
+           <height>641</height>
+          </rect>
+         </property>
+        </widget>
+       </widget>
+      </widget>
+     </item>
+    </layout>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -184,7 +239,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>818</width>
      <height>21</height>
     </rect>
    </property>

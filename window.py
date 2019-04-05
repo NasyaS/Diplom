@@ -2,7 +2,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QFileDialog, QGraphicsScene, QGraphicsPixmapItem
 from PyQt5.QtCore import QSize, Qt, pyqtSlot
 from PyQt5.uic import loadUi
-from PyQt5.QtGui import QPixmap
+from PyQt5.QtGui import QPixmap, QPen, QBrush
 import qosm
 import sys
 from PIL import Image, ExifTags, ImageDraw
@@ -37,9 +37,14 @@ class Window(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self)
 		self.count = 0
+		self.canvas_coords = []
+		self.drawingEnabled = False
+		self.states = {0: "Режим разметки", 1: "Режим просмотра"}
 		self.setMinimumSize(QSize(800, 500))
 		loadUi(r'ui.ui', self)
 
+
+		#TODO Delete this fucking shit
 		# self.view = QOSM(self)
 		# self.view.resize(381, 641)
 		# self.view.x = 400
@@ -56,11 +61,39 @@ class Window(QMainWindow):
 		self.matrix.addItems(self.matrixList.keys())
 
 	def load_image(self, file_name):
-		pixmap = QPixmap(file_name).scaledToHeight(self.photo.geometry().height())
-		scene = QGraphicsScene(0,0,pixmap.size().width(), pixmap.size().height()) 
-		scene.addItem(QGraphicsPixmapItem(pixmap)) 
-		self.photo.setScene(scene)
+		self.pixmap = QPixmap(file_name).scaledToHeight(self.photo.geometry().height())
+		self.scene = QGraphicsScene(0,0, self.pixmap.size().width(), self.pixmap.size().height()) 
+		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
+		self.photo.setScene(self.scene)
 		self.photo.show() 
+		self.photo.mousePressEvent = self.drawmode
+
+	def drawmode(self, event):
+		if not self.drawingEnabled: return
+		x = event.x()+self.photo.horizontalScrollBar().sliderPosition()
+		y = event.y()
+		self.canvas_coords.append((x,y))
+		self.scene.addEllipse(x-1.5, y-1.5, 3, 3, QPen(QtCore.Qt.red), QtCore.Qt.red)
+		t = len(self.canvas_coords)
+		if t > 1: 
+			self.scene.addLine(*self.canvas_coords[t-2], *self.canvas_coords[t-1], QPen(QtCore.Qt.red))
+			M1, M2 = self.canvas_coords[:2]
+			self.Len_line = (M2[0]-M1[0])**2+(M2[1]-M2[1])**2
+			self.canvas_coords = []
+			self.drawingEnabled = False
+			self.mark.setText(self.states[self.drawingEnabled])
+
+	@pyqtSlot()
+	def on_mark_clicked(self):
+		self.drawingEnabled = False if self.drawingEnabled else True
+		self.mark.setText(self.states[self.drawingEnabled])
+
+	@pyqtSlot()
+	def on_clear_clicked(self):
+		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
+		self.canvas_coords = []
+		self.load_image(self.filePath)
+
 
 	def onMarkerRClick(self, key, lat, lng):
 		if self.checkBox.isChecked():
@@ -108,9 +141,8 @@ class Window(QMainWindow):
 		print(height)
 
 		self.focalLength = exif['FocalLength'][0]/exif['FocalLength'][1]	
-		Len_line = 500  # to do
 
-		size_on_matrix = (self.matrixList[self.matrix.currentText()]*Len_line)/np.max(([height,width]))
+		size_on_matrix = (self.matrixList[self.matrix.currentText()]*self.Len_line)/np.max(([height,width]))
 
 		self.building_height = float(self.height.text())
 			
