@@ -61,7 +61,9 @@ class Window(QMainWindow):
 		self.matrix.addItems(self.matrixList.keys())
 
 	def load_image(self, file_name):
-		self.pixmap = QPixmap(file_name).scaledToHeight(self.photo.geometry().height())
+		file = QPixmap(file_name)
+		self.origin_sz = (file.size().width(), file.size().height())
+		self.pixmap = file.scaledToHeight(self.photo.geometry().height())
 		self.scene = QGraphicsScene(0,0, self.pixmap.size().width(), self.pixmap.size().height()) 
 		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
 		self.photo.setScene(self.scene)
@@ -78,7 +80,9 @@ class Window(QMainWindow):
 		if t > 1: 
 			self.scene.addLine(*self.canvas_coords[t-2], *self.canvas_coords[t-1], QPen(QtCore.Qt.red))
 			M1, M2 = self.canvas_coords[:2]
-			self.Len_line = math.sqrt(M2[0]-M1[0])**2+(M2[1]-M2[1])**2
+			scale = lambda w, h: (w*self.origin_sz[0]/self.pixmap.size().width(), h*self.origin_sz[1]/self.pixmap.size().height())
+			M1, M2 = scale(*M1), scale(*M2)
+			self.Len_line = math.sqrt((M2[0]-M1[0])**2+(M2[1]-M1[1])**2)
 			self.canvas_coords = []
 			self.drawingEnabled = False
 			self.mark.setText(self.states[self.drawingEnabled])

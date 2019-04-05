@@ -13,7 +13,6 @@ def calculate():
     img = Image.open('photo1.jpg')
 
     print(img.info['dpi'][0])
-
     image = cv2.imread('photo1.jpg')
     height = np.size(image, 0)
     width = np.size(image, 1)
