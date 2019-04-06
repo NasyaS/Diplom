@@ -53,7 +53,8 @@ class Window(QMainWindow):
 		self.filePath = ''
 		self.matrixList = {
 			
-			'23.1x15.4': 23.1 #matrix size : max size of matrix size
+			'23.1x15.4': 23.1,
+			'6.16x4.14': 6.16 #matrix size : max size of matrix size
 		}
 		self.building_height = 0 #visota zdania
 		self.distance = 0
