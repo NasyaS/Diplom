@@ -92,6 +92,7 @@ class Window(QMainWindow):
 
 	@pyqtSlot()
 	def on_clear_clicked(self):
+		self.scene.clear()
 		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
 		self.canvas_coords = []
 
