@@ -203,7 +203,7 @@
         <attribute name="title">
          <string>Фотография</string>
         </attribute>
-        <widget class="QGraphicsView" name="photo">
+        <widget class="QGraphicsView" name="canvas">
          <property name="geometry">
           <rect>
            <x>0</x>
