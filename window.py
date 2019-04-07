@@ -42,6 +42,7 @@ class Window(QMainWindow):
 		self.states = {0: "Режим разметки", 1: "Режим просмотра"}
 		self.setMinimumSize(QSize(800, 500))
 		loadUi(r'ui.ui', self)
+		self.canvas_sz = (self.canvas.geometry().width(), self.canvas.geometry().height())
 
 
 		#TODO Delete this fucking shit
@@ -62,18 +63,20 @@ class Window(QMainWindow):
 		self.matrix.addItems(self.matrixList.keys())
 
 	def load_image(self, file_name):
+		self.canvas.resize(*self.canvas_sz)
 		file = QPixmap(file_name)
 		self.origin_sz = (file.size().width(), file.size().height())
 		self.pixmap = file.scaledToHeight(self.canvas.geometry().height())
+		if self.pixmap.size().width() < self.canvas.geometry().width(): self.canvas.resize(self.pixmap.size())
 		self.scene = QGraphicsScene(0,0, self.pixmap.size().width(), self.pixmap.size().height()) 
 		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
 		self.canvas.setScene(self.scene)
-		self.canvas.show() 
+		self.canvas.show()
 		self.canvas.mousePressEvent = self.drawmode
 
 	def drawmode(self, event):
 		if not self.drawingEnabled: return
-		x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y()
+		x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y()+self.canvas.verticalScrollBar().sliderPosition()
 		self.canvas_coords.append((x,y))
 		self.scene.addEllipse(x-1.5, y-1.5, 3, 3, QPen(QtCore.Qt.red), QtCore.Qt.red)
 		if len(self.canvas_coords) < 2: return
