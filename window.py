@@ -75,7 +75,7 @@ class Window(QMainWindow):
 		if not self.drawingEnabled: return
 		x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y()
 		self.canvas_coords.append((x,y))
-		self.scene.addEllipse(x-1.5, y-1.5, 3, 3, QPen(QtCore.Qt.red), QtCore.Qt.red)
+		self.scene.addEllipse(x-1.5, y-1.5, 3, 3, QPen(QtCore.Qt.red), QtCore.Qt.black)
 		if len(self.canvas_coords) < 2: return
 		self.scene.addLine(*self.canvas_coords[1], *self.canvas_coords[0], QPen(QtCore.Qt.red))
 		scale = lambda w, h: np.array((w*self.origin_sz[0]/self.pixmap.size().width(), h*self.origin_sz[1]/self.pixmap.size().height()))
@@ -92,6 +92,7 @@ class Window(QMainWindow):
 
 	@pyqtSlot()
 	def on_clear_clicked(self):
+		self.scene.clear()
 		self.scene.addItem(QGraphicsPixmapItem(self.pixmap)) 
 		self.canvas_coords = []
 

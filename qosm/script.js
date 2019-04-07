@@ -1,3 +1,4 @@
+
 var mymap;
 var circle = 0;
 var markers = [];
@@ -11,6 +12,8 @@ function initialize(){
 	    maxZoom: 18,
 	    id: 'mapbox.streets'
 	}).addTo(mymap);
+    L.Control.geocoder().addTo(mymap);
+
 
 	if (typeof qt != 'undefined') {
 
