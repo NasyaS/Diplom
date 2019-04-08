@@ -26,8 +26,6 @@ class Window(QMainWindow):
 		loadUi(r'ui.ui', self)
 		self.canvas_sz = (self.canvas.geometry().width(),
 						  self.canvas.geometry().height())
-		self.cord_x = 0
-		self.cord_y = 0
 
 		self.filePath = ''
 		self.matrixList = {
@@ -104,23 +102,12 @@ class Window(QMainWindow):
 		print(latitude, longitude)
 		self.cord_x, self.cord_y = latitude, longitude
 		self.count+=1
-		self.view.addMarker("Mark "+str(self.count), latitude, longitude, **dict(
-			icon="http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_gray.png",
-			draggable=True,
-			title=u"mark n "+str(self.count)))
+		self.view.addMarker("Mark "+str(self.count), latitude, longitude)
 
 	@pyqtSlot()
 	def on_go_clicked(self):
 		self.calc()
 
-	@pyqtSlot()
-	def on_ring_clicked(self):
-		print(self.cord_x, self.cord_y)
-		self.view.addCircle(self.cord_x, self.cord_y,
-							self.distance-self.distance*0.05)
-		self.view.addCircle(self.cord_x, self.cord_y,
-							self.distance+self.distance*0.05)
-		self.panMap(self.cord_x, self.cord_y)
 
 	def panMap(self, lat, lng,):
 		frame = self.view.page()
@@ -149,5 +136,10 @@ class Window(QMainWindow):
 
 		self.distance = self.focalLength * \
 			((self.building_height/size_on_matrix)+1)
+
+
+		print(self.distance, self.distance*0.1)	
+
+		self.view.addCircle(self.distance)
 
 		self.dist.setText(str(self.distance))

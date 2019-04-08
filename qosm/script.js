@@ -1,6 +1,6 @@
 
 var mymap;
-var circle = 0;
+var circles = [];
 var markers = [];
 var LeafIcon;
 var qtWidget;
@@ -53,16 +53,19 @@ function osm_setZoom(zoom) {
     mymap.setZoom(zoom);
 }
 
-function osm_addCircle(lat, lng, radius){
-    // osm_removeCircle()
-    circle = L.circle([lat, lng], radius).addTo(mymap); 
+function osm_addCircle(rad){
+    stroke = rad*0.1
+    for (key in markers){
+        lat = markers[key].getLatLng().lat
+        lng = markers[key].getLatLng().lng
+        var circle = L.circle([lat, lng], { fillOpacity: 0.0, weight: stroke, opacity: 0.5, radius: rad}).addTo(mymap); 
+        circles[key] = circle
+    }
 }
 
-function osm_removeCircle(){
-    if (circle != 0){
-        mymap.removeLayer(circle)
-        circle = 0
-    }
+function osm_removeCircle(key){
+    mymap.removeLayer(circles[key]);
+    delete circles[key];
 }
 
 function osm_addMarker(key, latitude, longitude, parameters){
@@ -107,6 +110,7 @@ function osm_addMarker(key, latitude, longitude, parameters){
     markers[key] = marker;
     return key;
 }
+
 
 function osm_deleteMarker(key) {
     mymap.removeLayer(markers[key]);
