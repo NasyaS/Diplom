@@ -53,12 +53,35 @@ function osm_setZoom(zoom) {
     mymap.setZoom(zoom);
 }
 
+function drawCirclePoly(lng, lat, radius){
+    var d2r = Math.PI / 180;
+    var r2d = 180 / Math.PI;
+    var earthsradius = 6377830
+    var points = 512;
+    var rlat = (radius / earthsradius) * r2d;
+    var rlng = rlat / Math.cos(lat * d2r);
+    var extp = new Array();
+    for (var i=0; i < points+1; i++){
+        var theta = Math.PI * (i / (points/2));
+        ex = lng + (rlng * Math.cos(theta));
+        ey = lat + (rlat * Math.sin(theta));
+        extp.push(new L.LatLng(ey, ex));
+    }
+    return extp
+}
+
 function osm_addCircle(rad){
-    stroke = rad*0.1
+    outer = rad+rad*0.05
+    inner = rad-rad*0.05
     for (key in markers){
         lat = markers[key].getLatLng().lat
         lng = markers[key].getLatLng().lng
-        var circle = L.circle([lat, lng], { fillOpacity: 0.0, weight: stroke, opacity: 0.5, radius: rad}).addTo(mymap); 
+        var outer_circle = drawCirclePoly(lng, lat, outer)
+        var inner_circle = drawCirclePoly(lng, lat, inner) 
+        var latlngs = [ ]
+        latlngs.push(outer_circle)
+        latlngs.push(inner_circle)
+        var circle = new L.polygon(latlngs).addTo(mymap)
         circles[key] = circle
     }
 }
