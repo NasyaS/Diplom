@@ -1,30 +1,41 @@
-from PyQt5 import QtCore, QtWidgets, QtGui, QtWebChannel, QtNetwork
-from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineView, QWebEngineScript
+import functools
+import json
+import os
+import sys
+
+import decorator
+from PyQt5 import QtCore, QtGui, QtNetwork, QtWebChannel, QtWidgets
+from PyQt5.QtCore import QObject, QSize, Qt, QUrl, pyqtSignal, pyqtSlot
+from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkDiskCache
 from PyQt5.QtWebChannel import QWebChannel
-from PyQt5.QtNetwork import QNetworkDiskCache, QNetworkAccessManager
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton
-from PyQt5.QtCore import QSize, Qt, pyqtSlot, QUrl, QObject, pyqtSignal
+from PyQt5.QtWebEngineWidgets import (QWebEnginePage, QWebEngineScript,
+                                      QWebEngineView)
+from PyQt5.QtWidgets import QLabel, QMainWindow, QPushButton
 from PyQt5.uic import loadUi
-import functools, sys, json, os, decorator
 
 doTrace = False
 
 path = os.path.abspath(__file__)[:-9]
+
 
 @decorator.decorator
 def trace(function, *args, **k):
     """Decorates a function by tracing the begining and
     end of the function execution, if doTrace global is True"""
 
-    if doTrace: print("> " + function.__name__, args, k)
+    if doTrace:
+        print("> " + function.__name__, args, k)
     result = function(*args, **k)
-    if doTrace: print("< " + function.__name__, args, k, "->", result)
+    if doTrace:
+        print("< " + function.__name__, args, k, "->", result)
     return result
+
 
 class _LoggedPage(QWebEnginePage):
     @trace
     def javaScriptConsoleMessage(self, msg, line, source):
         print('JS: %s line %d: %s' % (source, line, msg))
+
 
 class QOSM(QWebEngineView):
     mapMoved = pyqtSignal(float, float)
@@ -50,6 +61,8 @@ class QOSM(QWebEngineView):
             HTML = f.read()
         self.setHtml(HTML)
         self.loadFinished.connect(self.onLoadFinished)
+        self.lat = 0
+        self.lng = 0
 
     def onLoadFinished(self):
         with open(path+'qwebchannel.js') as f:
@@ -79,8 +92,8 @@ class QOSM(QWebEngineView):
 
     def addMarker(self, key, latitude, longitude, **extra):
         return self.page().runJavaScript("osm_addMarker(key={!r},"
-                              "latitude= {}, "
-                              "longitude= {}, {});".format(key, latitude, longitude, json.dumps(extra)))
+                                         "latitude= {}, "
+                                         "longitude= {}, {});".format(key, latitude, longitude, json.dumps(extra)))
 
     def removeMarker(self, key):
         return self.page().runJavaScript("osm_deleteMarker(key={!r});".format(key))
@@ -93,13 +106,16 @@ class QOSM(QWebEngineView):
 
     def moveMarker(self, key, latitude, longitude):
         self.page().runJavaScript("osm_moveMarker(key={!r},"
-                       "latitude= {}, "
-                       "longitude= {});".format(key, latitude, longitude))
+                                  "latitude= {}, "
+                                  "longitude= {});".format(key, latitude, longitude))
 
     def positionMarker(self, key):
         return tuple(self.page().runJavaScript("osm_posMarker(key={!r});".format(key)))
 
-#----------marker signals
+    def get_coord(self):
+        return self.lat, self.lng
+
+# ----------marker signals
 
     @pyqtSlot(str, float, float)
     def markerIsMoved(self, key, lat, lng):
@@ -117,7 +133,7 @@ class QOSM(QWebEngineView):
     def markerIsRClicked(self, key, lat, lng):
         self.markerRightClicked.emit(key, lat, lng)
 
-#-----------map signals
+# -----------map signals
 
     @pyqtSlot(float, float)
     def mapIsMoved(self, lat, lng):
@@ -126,6 +142,9 @@ class QOSM(QWebEngineView):
     @pyqtSlot(float, float)
     def mapIsClicked(self, lat, lng):
         self.mapClicked.emit(lat, lng)
+        self.lat = lat
+        self.lng = lng
+        # print(lat,lng)
 
     @pyqtSlot(float, float)
     def mapIsDoubleClicked(self, lat, lng):
