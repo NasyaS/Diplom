@@ -140,6 +140,10 @@ class Window(QMainWindow):
 
 		print(self.distance, self.distance*0.1)	
 
-		self.view.addCircle(self.distance)
+		if self.ch1.isChecked(): m = 1
+		if self.ch2.isChecked(): m = 2
+		if self.ch3.isChecked(): m = 3
+
+		self.view.addCircle(self.distance, m)
 
 		self.dist.setText(str(self.distance))

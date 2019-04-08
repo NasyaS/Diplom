@@ -71,6 +71,10 @@ class QOSM(QWebEngineView):
         self.page().runJavaScript(JS)
         self.page().runJavaScript("initialize()")
 
+
+    def clear(self):
+        self.page().runJavaScript("osm_clear()")    	
+
     def waitUntilReady(self):
         while not self.initialized:
             QApplication.processEvents()
@@ -96,8 +100,8 @@ class QOSM(QWebEngineView):
     def removeMarker(self, key):
         return self.page().runJavaScript("osm_deleteMarker(key={!r});".format(key))
 
-    def addCircle(self, radius):
-        return self.page().runJavaScript("osm_addCircle({})".format(radius))
+    def addCircle(self, radius, method):
+        return self.page().runJavaScript("osm_addCircle({},{})".format(radius, method))
 
     def removeCircle(self, latitude, longitude, radius):
         return self.page.runJavaScript("osm_removeCircle()")
