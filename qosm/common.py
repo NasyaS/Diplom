@@ -138,7 +138,6 @@ class QOSM(QWebEngineView):
     @pyqtSlot(float, float)
     def mapIsClicked(self, lat, lng):
         self.mapClicked.emit(lat, lng)
-        # print(lat,lng)
 
     @pyqtSlot(float, float)
     def mapIsDoubleClicked(self, lat, lng):
