@@ -6,7 +6,7 @@ var LeafIcon;
 var qtWidget;
 
 function initialize(){
-	mymap = L.map('mapid').setView([51.505, -0.09], 13);
+	mymap = L.map('mapid').setView([64.54938070965152, 40.53628921508789], 13);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia25zcm9vIiwiYSI6ImNqczI3dDRncDA2cWc0OXBtM2syaXVtZWoifQ.MSuCCjQY-bmbmXu2bprSSA', {
 	    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
 	    maxZoom: 18,
@@ -54,7 +54,7 @@ function osm_setZoom(zoom) {
 }
 
 function osm_addCircle(lat, lng, radius){
-    osm_removeCircle()
+    // osm_removeCircle()
     circle = L.circle([lat, lng], radius).addTo(mymap); 
 }
 

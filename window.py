@@ -113,7 +113,10 @@ class Window(QMainWindow):
         self.calc()
         self.cord_x, self.cord_y = self.view.get_coord()
         print(self.cord_x, self.cord_y)
-        self.view.addCircle(self.cord_x, self.cord_y, self.distance)
+        self.view.addCircle(self.cord_x, self.cord_y,
+                            self.distance-self.distance*0.05)
+        self.view.addCircle(self.cord_x, self.cord_y,
+                            self.distance+self.distance*0.05)
         self.panMap(self.cord_x, self.cord_y)
 
     def panMap(self, lat, lng,):
