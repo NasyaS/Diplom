@@ -29,6 +29,7 @@ class Window(QMainWindow):
         self.cord_x = 0
         self.cord_y = 0
 
+
         self.filePath = ''
         self.matrixList = {
 
@@ -100,21 +101,14 @@ class Window(QMainWindow):
         self.load_image(temp)
 
     def onMapLClick(self, latitude, longitude):
-        print(latitude, longitude)
-        if self.checkBox.isChecked():
-            self.count += 1
-            self.view.addMarker("My mark "+str(self.count), latitude, longitude, **dict(
-                icon="http://maps.gstatic.com/mapfiles/ridefinder-images/mm_20_gray.png",
-                draggable=True,
-                title=u"mark n "+str(self.count)))
+        self.cord_x, self.cord_y = latitude, longitude
+        self.count+=1
+        self.view.addMarker("Mark "+str(self.count), latitude, longitude)
+
 
     @pyqtSlot()
     def on_go_clicked(self):
         self.calc()
-
-    @pyqtSlot()
-    def on_ring_clicked(self):
-        self.cord_x, self.cord_y = self.view.get_coord()
         print(self.cord_x, self.cord_y)
         self.view.addCircle(self.cord_x, self.cord_y,
                             self.distance-self.distance*0.05)
