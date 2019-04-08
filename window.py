@@ -111,6 +111,9 @@ class Window(QMainWindow):
     @pyqtSlot()
     def on_go_clicked(self):
         self.calc()
+
+    @pyqtSlot()
+    def on_ring_clicked(self):
         self.cord_x, self.cord_y = self.view.get_coord()
         print(self.cord_x, self.cord_y)
         self.view.addCircle(self.cord_x, self.cord_y,
@@ -140,8 +143,7 @@ class Window(QMainWindow):
 
         self.focalLength = exif['FocalLength'][0]/exif['FocalLength'][1]
 
-        size_on_matrix = (self.matrixList[self.matrix.currentText(
-        )]*self.Len_line)/np.max(([height, width]))
+        size_on_matrix = (self.matrixList[self.matrix.currentText()]*self.Len_line)/np.max(([height, width]))
 
         self.building_height = float(self.height.text())
 

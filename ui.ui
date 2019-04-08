@@ -197,7 +197,7 @@
         </size>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tabPhoto">
         <attribute name="title">
@@ -227,6 +227,24 @@
            <height>641</height>
           </rect>
          </property>
+         <widget class="QPushButton" name="ring">
+          <property name="geometry">
+           <rect>
+            <x>450</x>
+            <y>580</y>
+            <width>131</width>
+            <height>31</height>
+           </rect>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>10</pointsize>
+           </font>
+          </property>
+          <property name="text">
+           <string>Построить область</string>
+          </property>
+         </widget>
         </widget>
        </widget>
       </widget>
