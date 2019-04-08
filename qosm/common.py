@@ -61,8 +61,6 @@ class QOSM(QWebEngineView):
             HTML = f.read()
         self.setHtml(HTML)
         self.loadFinished.connect(self.onLoadFinished)
-        self.lat = 0
-        self.lng = 0
 
     def onLoadFinished(self):
         with open(path+'qwebchannel.js') as f:
@@ -112,8 +110,6 @@ class QOSM(QWebEngineView):
     def positionMarker(self, key):
         return tuple(self.page().runJavaScript("osm_posMarker(key={!r});".format(key)))
 
-    def get_coord(self):
-        return self.lat, self.lng
 
 # ----------marker signals
 
@@ -142,8 +138,6 @@ class QOSM(QWebEngineView):
     @pyqtSlot(float, float)
     def mapIsClicked(self, lat, lng):
         self.mapClicked.emit(lat, lng)
-        self.lat = lat
-        self.lng = lng
         # print(lat,lng)
 
     @pyqtSlot(float, float)
