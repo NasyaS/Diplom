@@ -66,7 +66,7 @@ class Window(QMainWindow):
 		if len(self.canvas_coords) < 2:
 			return
 		self.scene.addLine(
-			*self.canvas_coords[1], *self.canvas_coords[0], QPen(QtCore.Qt.red))
+			*self.canvas_coords[1], *self.canvas_coords[0], QPen(QtCore.Qt.red, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
 		def scale(w, h): return np.array(
 			(w*self.origin_sz[0]/self.pixmap.size().width(), h*self.origin_sz[1]/self.pixmap.size().height()))
 		M1, M2 = [scale(*item) for item in self.canvas_coords]
