@@ -144,6 +144,7 @@ class Window(QMainWindow):
 		if self.ch1.isChecked(): m = 1
 		if self.ch2.isChecked(): m = 2
 		if self.ch3.isChecked(): m = 3
+		if self.ch4.isChecked(): m = 4
 
 		self.view.addCircle(self.distance, m)
 

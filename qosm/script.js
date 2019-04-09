@@ -75,7 +75,7 @@ function drawCirclePoly(lng, lat, radius){
 function osm_addCircle(rad, method){
     lat = markers[key].getLatLng().lat
     lng = markers[key].getLatLng().lng
-    if (method == 1){
+    if (method == 1 || method == 4){
         outer = rad+rad*0.05
         inner = rad-rad*0.05
         for (key in markers){
@@ -84,7 +84,12 @@ function osm_addCircle(rad, method){
             var latlngs = [ ]
             latlngs.push(outer_circle)
             latlngs.push(inner_circle)
-            var circle = new L.polygon(latlngs).addTo(mymap)
+            var circle
+            if (method == 1){
+                circle = new L.polygon(latlngs).addTo(mymap)
+            } else {
+                circle = new L.polygon(latlngs, {fillOpacity: 0.6, opacity: 0.0}).addTo(mymap)
+            }
             circles[key] = circle
         }
     } else if (method == 2){
@@ -93,7 +98,7 @@ function osm_addCircle(rad, method){
             var circle = L.circle([lat, lng], { fillOpacity: 0.0, weight: stroke, opacity: 0.5, radius: rad}).addTo(mymap);
             circles[key] = circle
         }
-    } else {
+    } else if (method == 3) {
         outer = rad+rad*0.05
         inner = rad-rad*0.05
         for (key in markers){
