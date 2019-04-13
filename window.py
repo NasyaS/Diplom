@@ -55,6 +55,7 @@ class Window(QMainWindow):
         self.canvas.setRenderHint(QtGui.QPainter.HighQualityAntialiasing, True)
         self.canvas.show()
         self.canvas.mousePressEvent = self.drawmode
+        self.drawingEnabled = True
 
     def drawmode(self, event):
         if not self.drawingEnabled:
@@ -73,13 +74,6 @@ class Window(QMainWindow):
         M1, M2 = [scale(*item) for item in self.canvas_coords]
         self.Len_line = np.linalg.norm(M2-M1)
         self.canvas_coords = []
-        self.drawingEnabled = False
-        self.mark.setText(self.states[self.drawingEnabled])
-
-    @pyqtSlot()
-    def on_mark_clicked(self):
-        self.drawingEnabled = False if self.drawingEnabled else True
-        self.mark.setText(self.states[self.drawingEnabled])
 
     @pyqtSlot()
     def on_clear_clicked(self):
@@ -140,15 +134,6 @@ class Window(QMainWindow):
 
         print(self.distance, self.distance*0.1)
 
-        if self.ch1.isChecked():
-            m = 1
-        if self.ch2.isChecked():
-            m = 2
-        if self.ch3.isChecked():
-            m = 3
-        if self.ch4.isChecked():
-            m = 4
-
-        self.view.addCircle(self.distance, m)
+        self.view.addCircle(self.distance)
 
         self.dist.setText(str(self.distance))

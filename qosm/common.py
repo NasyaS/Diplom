@@ -67,7 +67,10 @@ class QOSM(QWebEngineView):
             run_channel = f.read()
         with open(path+'script.js') as f:
             JS = f.read()
+        with open(path+'circle_disk.js') as f:
+            CL = f.read()
         self.page().runJavaScript(run_channel)
+        self.page().runJavaScript(CL)
         self.page().runJavaScript(JS)
         self.page().runJavaScript("initialize()")
 
@@ -100,8 +103,8 @@ class QOSM(QWebEngineView):
     def removeMarker(self, key):
         return self.page().runJavaScript("osm_deleteMarker(key={!r});".format(key))
 
-    def addCircle(self, radius, method):
-        return self.page().runJavaScript("osm_addCircle({},{})".format(radius, method))
+    def addCircle(self, radius):
+        return self.page().runJavaScript("osm_addCircle({})".format(radius))
 
     def removeCircle(self, latitude, longitude, radius):
         return self.page.runJavaScript("osm_removeCircle()")

@@ -126,13 +126,6 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="mark">
-         <property name="text">
-          <string>Режим разметки</string>
-         </property>
-        </widget>
-       </item>
-       <item>
         <widget class="QPushButton" name="clear">
          <property name="text">
           <string>Очистить</string>
@@ -147,74 +140,6 @@
          <property name="frameShadow">
           <enum>QFrame::Raised</enum>
          </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QGroupBox" name="groupBox">
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>120</height>
-          </size>
-         </property>
-         <property name="title">
-          <string>Метод отрисовки</string>
-         </property>
-         <widget class="QRadioButton" name="ch3">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>72</y>
-            <width>161</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Метод 3</string>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="ch2">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>48</y>
-            <width>161</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Метод 2</string>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="ch1">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>24</y>
-            <width>161</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Метод 1</string>
-          </property>
-          <property name="checked">
-           <bool>true</bool>
-          </property>
-         </widget>
-         <widget class="QRadioButton" name="ch4">
-          <property name="geometry">
-           <rect>
-            <x>10</x>
-            <y>96</y>
-            <width>161</width>
-            <height>17</height>
-           </rect>
-          </property>
-          <property name="text">
-           <string>Метод 4</string>
-          </property>
-         </widget>
         </widget>
        </item>
        <item>

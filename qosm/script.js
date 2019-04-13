@@ -15,7 +15,6 @@ function initialize(){
     L.Control.geocoder().addTo(mymap);
     L.control.scale().addTo(mymap);
 
-
 	if (typeof qt != 'undefined') {
 
 			new QWebChannel(qt.webChannelTransport, function (channel) {
@@ -55,60 +54,13 @@ function osm_setZoom(zoom) {
     mymap.setZoom(zoom);
 }
 
-function drawCirclePoly(lng, lat, radius){
-    var d2r = Math.PI / 180;
-    var r2d = 180 / Math.PI;
-    var earthsradius = 6377830
-    var points = 512;
-    var rlat = (radius / earthsradius) * r2d;
-    var rlng = rlat / Math.cos(lat * d2r);
-    var extp = new Array();
-    for (var i=0; i < points+1; i++){
-        var theta = Math.PI * (i / (points/2));
-        ex = lng + (rlng * Math.cos(theta));
-        ey = lat + (rlat * Math.sin(theta));
-        extp.push(new L.LatLng(ey, ex));
-    }
-    return extp
-}
-
-function osm_addCircle(rad, method){
+function osm_addCircle(rad){
     lat = markers[key].getLatLng().lat
     lng = markers[key].getLatLng().lng
-    if (method == 1 || method == 4){
-        outer = rad+rad*0.05
-        inner = rad-rad*0.05
-        for (key in markers){
-            var outer_circle = drawCirclePoly(lng, lat, outer)
-            var inner_circle = drawCirclePoly(lng, lat, inner) 
-            var latlngs = [ ]
-            latlngs.push(outer_circle)
-            latlngs.push(inner_circle)
-            var circle
-            if (method == 1){
-                circle = new L.polygon(latlngs).addTo(mymap)
-            } else {
-                circle = new L.polygon(latlngs, {fillOpacity: 0.6, opacity: 0.0}).addTo(mymap)
-            }
-            circles[key] = circle
-        }
-    } else if (method == 2){
-        stroke = rad*0.1
-        for (key in markers){
-            var circle = L.circle([lat, lng], { fillOpacity: 0.0, weight: stroke, opacity: 0.5, radius: rad}).addTo(mymap);
-            circles[key] = circle
-        }
-    } else if (method == 3) {
-        outer = rad+rad*0.05
-        inner = rad-rad*0.05
-        for (key in markers){
-            var outer_circle = L.circle([lat, lng], outer).addTo(mymap);
-            var inner_circle = L.circle([lat, lng], inner).addTo(mymap);
-            var circle = L.layerGroup([outer_circle, inner_circle]);
-            circles[key] = circle
-        }
-
-    }
+    outer = rad+rad*0.05
+    inner = rad-rad*0.05
+    var circle = L.circleDisk([lat, lng], inner, outer).addTo(mymap)
+    circles[key] = circle
 }
 
 function osm_removeCircle(key){
