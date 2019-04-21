@@ -13,19 +13,21 @@ from PyQt5.uic import loadUi
 import cv2
 import qosm
 from qosm.common import QOSM
+from ImageScene import ImageScene
 
 
 class Window(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.count = 0
-        self.canvas_coords = []
         self.drawingEnabled = False
         self.states = {0: "Режим разметки", 1: "Режим просмотра"}
         self.setMinimumSize(QSize(800, 500))
         loadUi(r'ui.ui', self)
         self.canvas_sz = (self.canvas.geometry().width(),
                           self.canvas.geometry().height())
+        self.scene = ImageScene()
+        self.canvas.setScene(self.scene.current)
 
         self.filePath = ''
         self.matrixList = {
@@ -40,18 +42,17 @@ class Window(QMainWindow):
         self.focalLength = 0
         self.matrix.addItems(self.matrixList.keys())
         self.view.mapClicked.connect(self.onMapLClick)
-
+        self.view.zoomFactor = 1.0
+        
     def load_image(self, file_name):
         self.canvas.resize(*self.canvas_sz)
         file = QPixmap(file_name)
-        self.origin_sz = (file.size().width(), file.size().height())
+        self.scene.patent_size(file.size().width(), file.size().height())
         self.pixmap = file.scaledToHeight(self.canvas.geometry().height())
         if self.pixmap.size().width() < self.canvas.geometry().width():
             self.canvas.resize(self.pixmap.size())
-        self.scene = QGraphicsScene(
-            0, 0, self.pixmap.size().width(), self.pixmap.size().height())
-        self.scene.addItem(QGraphicsPixmapItem(self.pixmap))
-        self.canvas.setScene(self.scene)
+        self.scene.load(self.pixmap)
+        self.canvas.setScene(self.scene.current)
         self.canvas.setRenderHint(QtGui.QPainter.HighQualityAntialiasing, True)
         self.canvas.show()
         self.canvas.mousePressEvent = self.drawmode
@@ -62,24 +63,14 @@ class Window(QMainWindow):
             return
         x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y() + \
             self.canvas.verticalScrollBar().sliderPosition()
-        self.canvas_coords.append((x, y))
-        self.scene.addEllipse(x-2.5, y-2.5, 5, 5,
-                              QPen(QtCore.Qt.red), QtCore.Qt.red)
-        if len(self.canvas_coords) < 2:
-            return
-        self.scene.addLine(
-            *self.canvas_coords[1], *self.canvas_coords[0], QPen(QtCore.Qt.red, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
-        def scale(w, h): return np.array(
-            (w*self.origin_sz[0]/self.pixmap.size().width(), h*self.origin_sz[1]/self.pixmap.size().height()))
-        M1, M2 = [scale(*item) for item in self.canvas_coords]
-        self.Len_line = np.linalg.norm(M2-M1)
-        self.canvas_coords = []
+        self.scene.addPoint(x,y)
+        if not self.scene.full: return
+        self.scene.connect()
+        self.Len_line = self.scene.get_distance()
 
     @pyqtSlot()
     def on_clear_clicked(self):
         self.scene.clear()
-        self.scene.addItem(QGraphicsPixmapItem(self.pixmap))
-        self.canvas_coords = []
 
     def onMarkerRClick(self, key, lat, lng):
         if self.checkBox.isChecked():
