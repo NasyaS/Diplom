@@ -2,8 +2,21 @@
 var mymap;
 var circles = [];
 var markers = [];
-var LeafIcon;
 var qtWidget;
+
+var m_c = 0;
+
+var icons = [ 
+    'https://c.radikal.ru/c37/1904/c0/5aa90f3825b3.png',
+    'https://c.radikal.ru/c38/1904/b6/7ea95b578256.png',
+    'https://c.radikal.ru/c15/1904/37/e0a2bef7c9cb.png',
+    'https://b.radikal.ru/b37/1904/b4/e6a0c6a082f8.png',
+    'https://c.radikal.ru/c06/1904/6e/e7ce93852bff.png',
+    'https://a.radikal.ru/a22/1904/fe/8698904a1a2a.png',
+    'https://c.radikal.ru/c07/1904/69/eee80cce7123.png',
+    'https://b.radikal.ru/b19/1904/e7/20462fed67b7.png',
+    'https://a.radikal.ru/a23/1904/c4/1ae8521ab52b.png',
+    'https://b.radikal.ru/b17/1904/fc/2f915b55c959.png'];
 
 function initialize(){
 	mymap = L.map('mapid').setView([64.54938070965152, 40.53628921508789], 13);
@@ -54,7 +67,7 @@ function osm_setZoom(zoom) {
     mymap.setZoom(zoom);
 }
 
-function osm_addCircle(rad){
+function osm_addCircle(rad, key) {
     lat = markers[key].getLatLng().lat
     lng = markers[key].getLatLng().lng
     outer = rad+rad*0.05
@@ -83,15 +96,20 @@ function osm_addMarker(key, latitude, longitude, parameters){
         osm_deleteMarker(key);
     } 
 
-    if ("icon" in parameters) {
-
-        parameters["icon"] = new L.Icon({
-            iconUrl: parameters["icon"],
-            iconAnchor: new L.Point(16, 16)
+    parameters["icon"] = new L.icon({
+        iconUrl:     icons[m_c],
+        //iconRetinaUrl: "lightblue_.png",
+        shadowUrl:     "https://d.radikal.ru/d28/1904/db/8ba68aad1ea2.png",
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+        shadowSize:  [41, 41]
         });
-    }
 
     var marker = L.marker([latitude, longitude], parameters).addTo(mymap);
+
+    m_c++
 
     if (typeof qtWidget != 'undefined') {
 

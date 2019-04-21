@@ -8,6 +8,8 @@ import numpy as np
 class ImageScene():
 	def __init__(self):
 		self.full = False
+		self.drawing = False
+		self.path = ''
 		self.coords = []
 		img = QPixmap('start.png')
 		self.current = QGraphicsScene(0, 0, img.size().width(), img.size().height())
@@ -22,7 +24,7 @@ class ImageScene():
 	def patent_size(self, x, y):
 		self.sz = (x, y)
 
-	def get_distance(self):
+	def get_lenline(self):
 		scale = lambda w, h: np.array((w*self.sz[0]/self.pixmap.size().width(), h*self.sz[1]/self.pixmap.size().height()))
 		M1, M2 = [scale(*item) for item in self.coords]
 		self.coords = []
@@ -33,6 +35,7 @@ class ImageScene():
 		self.pixmap, self.path = pixmap, path
 		self.current = QGraphicsScene(0, 0, self.pixmap.size().width(), self.pixmap.size().height())
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
+		self.drawing = True
 
 	def addPoint(self, x, y):
 		self.coords.append((x,y))

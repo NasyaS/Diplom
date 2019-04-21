@@ -20,13 +20,13 @@ class Window(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self)
 		self.count = 0
-		self.drawingEnabled = False
 		self.scenes = {}
 		self.setMinimumSize(QSize(800, 500))
 		loadUi(r'ui.ui', self)
 		self.init_scene('1')
 		self.add.clicked.connect(self.add_clicked)
 		self.one.clicked.connect(self.set_scene)
+		self.one.setEnabled(False)
 		self.imgs_l.setAlignment(Qt.AlignLeft)
 		self.canvas_sz = (self.canvas.geometry().width(),
 						  self.canvas.geometry().height())
@@ -34,7 +34,6 @@ class Window(QMainWindow):
 		self.canvas.dropEvent = self.dropmode
 		self.canvas.dragEnterEvent = self.dEE
 		self.canvas.dragMoveEvent = self.dME
-		self.filePath = ''
 		self.matrixList = {
 
 			'23.1x15.4': 23.1,
@@ -47,21 +46,18 @@ class Window(QMainWindow):
 		self.focalLength = 0
 		self.matrix.addItems(self.matrixList.keys())
 		self.view.mapClicked.connect(self.onMapLClick)
+		self.filePath = ''
 		self.init_table()
 
 	def init_table(self):
 		self.tableWidget.setColumnCount(2)
 		self.tableWidget.setHorizontalHeaderLabels(['Номер', 'Расстояние'])
-		self.tableWidget.insertRow(self.tableWidget.rowCount());
-		self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, QTableWidgetItem('1'));
-		self.tableWidget.setItem(self.tableWidget.rowCount()-1, 1, QTableWidgetItem('Test Data'));
 
 	def init_scene(self, num):
 		self.scene = ImageScene()
 		self.canvas.setScene(self.scene.current)
 		self.scenes[num] = self.scene
 
-		
 	def load_image(self, file_name):
 		self.canvas.resize(*self.canvas_sz)
 		file = QPixmap(file_name)
@@ -98,6 +94,9 @@ class Window(QMainWindow):
 
 	def set_scene(self):
 		sender = self.sender()
+		for each in self.findChildren(QtWidgets.QPushButton): 
+			each.setEnabled(True)
+		sender.setEnabled(False)
 		self.scene = self.scenes[sender.text()]
 		self.canvas.setScene(self.scene.current)
 		self.path.setText(self.scene.path)
@@ -105,6 +104,9 @@ class Window(QMainWindow):
 	def add_clicked(self):
 		if len(self.scenes) > 9: return
 		temp = QPushButton(str(len(self.scenes)+1), clicked = self.set_scene)
+		for each in self.findChildren(QtWidgets.QPushButton): 
+			each.setEnabled(True)
+		temp.setEnabled(False)
 		temp.setMinimumSize(60, 30)
 		temp.setMaximumSize(60, 30)
 		self.imgs_l.addWidget(temp)
@@ -112,7 +114,6 @@ class Window(QMainWindow):
 		self.init_scene(str(len(self.scenes)+1))
 
 	def dropmode(self, event):
-		print('accept')
 		if event.mimeData().hasUrls:
 			event.setDropAction(QtCore.Qt.CopyAction)
 			event.accept()
@@ -125,13 +126,12 @@ class Window(QMainWindow):
 			event.ignore()
 
 	def drawmode(self, event):
-		if not self.drawingEnabled: self.open_dialog()
+		if not self.scene.drawing: self.open_dialog(); return
 		x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y() + \
 			self.canvas.verticalScrollBar().sliderPosition()
 		self.scene.addPoint(x,y)
 		if not self.scene.full: return
 		self.scene.connect()
-		self.Len_line = self.scene.get_distance()
 
 	@pyqtSlot()
 	def on_clear_clicked(self):
@@ -149,10 +149,9 @@ class Window(QMainWindow):
 		self.load_image(temp)
 
 	def onMapLClick(self, latitude, longitude):
-		print(latitude, longitude)
-		self.cord_x, self.cord_y = latitude, longitude
-		self.count += 1
-		self.view.addMarker("Mark "+str(self.count), latitude, longitude)
+		if self.count < len(self.scenes):
+			self.count += 1
+			self.view.addMarker("Mark "+str(self.count), latitude, longitude)
 
 	@pyqtSlot()
 	def on_go_clicked(self):
@@ -178,17 +177,13 @@ class Window(QMainWindow):
 		print(height)
 
 		self.focalLength = exif['FocalLength'][0]/exif['FocalLength'][1]
-
-		size_on_matrix = (self.matrixList[self.matrix.currentText(
-		)]*self.Len_line)/np.max(([height, width]))
-
 		self.building_height = float(self.height.text())
 
-		self.distance = self.focalLength * \
+		for key in self.scenes:
+			size_on_matrix = (self.matrixList[self.matrix.currentText()]*self.scenes[key].get_lenline())/np.max(([height, width]))
+			distance = self.focalLength * \
 			((self.building_height/size_on_matrix)+1)
-
-		print(self.distance, self.distance*0.1)
-
-		self.view.addCircle(self.distance)
-
-		self.dist.setText(str(self.distance))
+			self.view.addCircle(distance, "Mark "+key)
+			self.tableWidget.insertRow(self.tableWidget.rowCount());
+			self.tableWidget.setItem(self.tableWidget.rowCount()-1, 0, QTableWidgetItem(key));
+			self.tableWidget.setItem(self.tableWidget.rowCount()-1, 1, QTableWidgetItem(str(distance)));
