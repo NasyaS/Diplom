@@ -29,8 +29,8 @@ class ImageScene():
 		self.full = False
 		return np.linalg.norm(M2-M1)
 
-	def load(self, pixmap):
-		self.pixmap = pixmap
+	def load(self, pixmap, path):
+		self.pixmap, self.path = pixmap, path
 		self.current = QGraphicsScene(0, 0, self.pixmap.size().width(), self.pixmap.size().height())
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
 
