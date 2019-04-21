@@ -28,7 +28,10 @@ class Window(QMainWindow):
                           self.canvas.geometry().height())
         self.scene = ImageScene()
         self.canvas.setScene(self.scene.current)
-
+        self.canvas.mousePressEvent = self.drawmode
+        self.canvas.dropEvent = self.dropmode
+        self.canvas.dragEnterEvent = self.dEE
+        self.canvas.dragMoveEvent = self.dME
         self.filePath = ''
         self.matrixList = {
 
@@ -55,12 +58,36 @@ class Window(QMainWindow):
         self.canvas.setScene(self.scene.current)
         self.canvas.setRenderHint(QtGui.QPainter.HighQualityAntialiasing, True)
         self.canvas.show()
-        self.canvas.mousePressEvent = self.drawmode
         self.drawingEnabled = True
 
+    def dEE(self, event):
+        if event.mimeData().hasUrls:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dME(self, event):
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropmode(self, event):
+        print('accept')
+        if event.mimeData().hasUrls:
+            event.setDropAction(QtCore.Qt.CopyAction)
+            event.accept()
+            for url in event.mimeData().urls():
+                temp = str(url.toLocalFile())
+            self.path.setText(temp)
+            self.filePath = temp
+            self.load_image(temp)  
+        else:
+            event.ignore()
+
     def drawmode(self, event):
-        if not self.drawingEnabled:
-            return
+        if not self.drawingEnabled: self.open_dialog()
         x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y() + \
             self.canvas.verticalScrollBar().sliderPosition()
         self.scene.addPoint(x,y)
@@ -76,8 +103,7 @@ class Window(QMainWindow):
         if self.checkBox.isChecked():
             self.view.removeMarker(key)
 
-    @pyqtSlot()
-    def on_btnpath_clicked(self):
+    def open_dialog(self):
         temp = QFileDialog.getOpenFileName(
             self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
         self.path.setText(temp)
