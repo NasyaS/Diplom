@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
+    <width>269</width>
     <height>160</height>
    </rect>
   </property>
@@ -18,7 +18,7 @@
     <rect>
      <x>10</x>
      <y>10</y>
-     <width>361</width>
+     <width>251</width>
      <height>141</height>
     </rect>
    </property>
@@ -41,7 +41,21 @@
      </widget>
     </item>
     <item>
-     <widget class="QLineEdit" name="newSize"/>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLineEdit" name="newSize_l"/>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="text">
+         <string>x</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="newSize_r"/>
+      </item>
+     </layout>
     </item>
     <item>
      <widget class="QDialogButtonBox" name="buttonBox">

@@ -111,7 +111,7 @@ class Window(QMainWindow):
 
 	def accept(self):
 		newkey = self.dialog.newName.text()
-		newvalue = float(self.dialog.newSize.text())
+		newvalue = self.dialog.newSize_l.text()+'x'+self.dialog.newSize_r.text()
 		with open('data.json') as f:
 			data = json.loads(f.read())
 		if not newkey in data:
@@ -162,7 +162,6 @@ class Window(QMainWindow):
 ###### Calculation Block
 
 	def calc(self):
-		print(len(self.scenes))
 		for key in self.scenes:
 
 			if DEBUG:
@@ -171,7 +170,7 @@ class Window(QMainWindow):
 
 			focalLength = self.scenes[key].exif['FocalLength'][0]/self.scenes[key].exif['FocalLength'][1]
 			building_height = float(self.height.text())
-			size_on_matrix = (self.matrixList[self.matrix.currentText()]*self.scenes[key].get_lenline())/np.max((self.scenes[key].getsize()))
+			size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.currentText()].split('x'))))*self.scenes[key].get_lenline())/np.max((self.scenes[key].getsize()))
 			distance = focalLength * \
 			((building_height/size_on_matrix)+1)
 			self.view.addCircle(distance, "Mark "+key)
