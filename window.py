@@ -5,7 +5,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QSize, Qt, pyqtSlot
 from PyQt5.QtGui import QBrush, QPen, QPixmap
 from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsScene,
-							 QLabel, QMainWindow, QPushButton)
+							 QLabel, QMainWindow, QPushButton, QDialog)
 from PyQt5.uic import loadUi
 
 import cv2
@@ -17,6 +17,11 @@ from TableModel import tableModel
 #For debug only, delete later
 DEBUG = True
 
+class AddDialog(QDialog):
+    def __init__(self):
+        QDialog.__init__(self)
+        loadUi('AddDialog.ui', self)
+
 class Window(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self)
@@ -24,11 +29,9 @@ class Window(QMainWindow):
 		self.createSignals()
 		self.scenes = {}
 		self.init_scene('1')
+		self.loadjson()
 		self.imgs_l.setAlignment(Qt.AlignLeft)
 		self.canvas_sz = (self.canvas.geometry().width(), self.canvas.geometry().height())
-		with open('data.json') as f:
-			self.matrixList = json.loads(f.read())
-		self.matrix.addItems(self.matrixList.keys())
 		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние'])
 
 ###### Signals and Slots Block
@@ -99,7 +102,32 @@ class Window(QMainWindow):
 	def on_clear_clicked(self):
 		self.scene.clear()
 
+	@pyqtSlot()
+	def on_addButton_clicked(self):
+		self.dialog = AddDialog()
+		self.dialog.show()
+		self.dialog.accepted.connect(self.accept)
+		self.dialog.exec_()
+
+	def accept(self):
+		newkey = self.dialog.newName.text()
+		newvalue = float(self.dialog.newSize.text())
+		with open('data.json') as f:
+			data = json.loads(f.read())
+		if not newkey in data:
+			data[newkey] = newvalue
+		print(data)
+		with open('data.json', 'w') as f:
+			json.dump(data, f)
+		self.loadjson()
+
 ###### Interface Manipulations Block
+
+	def loadjson(self):
+		self.matrix.clear()
+		with open('data.json') as f:
+			self.matrixList = json.loads(f.read())
+		self.matrix.addItems(self.matrixList.keys())
 
 	def init_scene(self, num):
 		self.scene = ImageScene()
