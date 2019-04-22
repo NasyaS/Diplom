@@ -13,7 +13,7 @@ from PyQt5.QtWebEngineWidgets import (QWebEnginePage, QWebEngineScript,
 from PyQt5.QtWidgets import QLabel, QMainWindow, QPushButton
 from PyQt5.uic import loadUi
 
-doTrace = False
+doTrace = True
 
 path = os.path.abspath(__file__)[:-9]
 
@@ -48,8 +48,10 @@ class QOSM(QWebEngineView):
     markerDoubleClicked = pyqtSignal(str, float, float)
     markerRightClicked = pyqtSignal(str, float, float)
 
+
     def __init__(self, parent):
         super(QOSM, self).__init__(parent)
+        self.markersCount = 0
         self.manager = QNetworkAccessManager()
         self.cache = QNetworkDiskCache()
         self.cache.setCacheDirectory("cache")
@@ -96,6 +98,7 @@ class QOSM(QWebEngineView):
         return center['lat'], center['lng']
 
     def addMarker(self, key, latitude, longitude, **extra):
+        self.markersCount+=1
         return self.page().runJavaScript("osm_addMarker(key={!r},"
                                          "latitude= {}, "
                                          "longitude= {}, {});".format(key, latitude, longitude, json.dumps(extra)))

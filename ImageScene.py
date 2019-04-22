@@ -1,3 +1,4 @@
+from PIL import ExifTags, Image
 from PyQt5.QtGui import QBrush, QPen, QPixmap
 from PyQt5.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
 from PyQt5 import QtCore
@@ -21,6 +22,9 @@ class ImageScene():
 		self.coords = []
 		self.full = False
 
+	def getsize(self):
+		return list(self.sz)
+
 	def patent_size(self, x, y):
 		self.sz = (x, y)
 
@@ -31,11 +35,22 @@ class ImageScene():
 		self.full = False
 		return np.linalg.norm(M2-M1)
 
-	def load(self, pixmap, path):
-		self.pixmap, self.path = pixmap, path
+	def load(self, path, canvas):
+		image = Image.open(path)
+		file = QPixmap(path)
+		self.patent_size(file.size().width(), file.size().height())
+		self.pixmap = file.scaledToHeight(canvas.geometry().height())
+		if self.pixmap.size().width() < canvas.geometry().width():
+			canvas.resize(self.pixmap.size())
+		self.path = path
 		self.current = QGraphicsScene(0, 0, self.pixmap.size().width(), self.pixmap.size().height())
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
 		self.drawing = True
+		self.exif = {
+			ExifTags.TAGS[k]: v
+			for k, v in image._getexif().items()
+			if k in ExifTags.TAGS
+		}
 
 	def addPoint(self, x, y):
 		self.coords.append((x,y))
@@ -44,3 +59,5 @@ class ImageScene():
 
 	def connect(self):
 		self.current.addLine(*self.coords[1], *self.coords[0], QPen(QtCore.Qt.red, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
+
+
