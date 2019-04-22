@@ -4,7 +4,7 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QSize, Qt, pyqtSlot
 from PyQt5.QtGui import QBrush, QPen, QPixmap
-from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsScene,
+from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsScene, QDialogButtonBox,
 							 QLabel, QMainWindow, QPushButton, QDialog)
 from PyQt5.uic import loadUi
 
@@ -18,14 +18,23 @@ from TableModel import tableModel
 DEBUG = True
 
 class AddDialog(QDialog):
-    def __init__(self):
-        QDialog.__init__(self)
-        loadUi('AddDialog.ui', self)
+	def __init__(self):
+		QDialog.__init__(self)
+		loadUi('AddDialog.ui', self)
+		self.setWindowFlags(Qt.SplashScreen);
+		ok = QPushButton('OK', objectName = 'Ok')
+		cancel = QPushButton('ОТМЕНА', objectName = 'Cancel')
+		self.buttonBox.addButton(ok, QDialogButtonBox.AcceptRole);
+		self.buttonBox.addButton(cancel, QDialogButtonBox.RejectRole);
+		with open('interface/dialogs.css') as f:
+			self.setStyleSheet(f.read())
 
 class Window(QMainWindow):
 	def __init__(self):
 		QMainWindow.__init__(self)
 		loadUi(r'ui.ui', self)
+		with open('interface/main.css') as f:
+			self.setStyleSheet(f.read())
 		self.createSignals()
 		self.scenes = {}
 		self.init_scene('1')

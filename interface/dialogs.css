@@ -1,0 +1,58 @@
+QDialog{
+	background: #f1f2f6;
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #96a0ad;
+}
+
+QLabel{
+	font-family: "Bulgarien Ariel";
+	font-weight: bold;
+	font-size: 12px;
+}
+
+
+QLineEdit{
+	font-family: "Bulgarien Ariel";
+	background: white;
+	border-radius: 3px;
+	border-width: 1px;
+	border-style: solid;
+	border-color: #96a0ad;
+}
+
+QPushButton{
+	outline: none;
+	font-family: "Bulgarien Ariel";
+	font-size: 14px;
+	width: 100px;
+	height: 25px;
+	color: white;
+	border-radius: 3px;
+	border: none;
+}
+
+QPushButton#Ok{
+	background: #a0d468;
+}
+
+QPushButton#Ok:hover{
+	background: #8cc152;
+}
+
+QPushButton#Ok:pressed{
+	background: #a0d468;
+}
+
+QPushButton#Cancel{
+	background: #fc6e51;
+}
+
+QPushButton#Cancel:hover{
+	background: #e9573f;
+}
+
+QPushButton#Cancel:pressed{
+	background: #fc6e51;
+}
