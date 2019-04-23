@@ -109,8 +109,8 @@ class QOSM(QWebEngineView):
     def addCircle(self, radius, key):
         return self.page().runJavaScript("osm_addCircle({},key={!r})".format(radius, key))
 
-    def removeCircle(self, latitude, longitude, radius):
-        return self.page.runJavaScript("osm_removeCircle()")
+    def removeCircles(self):
+        return self.page().runJavaScript("osm_rmCircles()")
 
     def moveMarker(self, key, latitude, longitude):
         self.page().runJavaScript("osm_moveMarker(key={!r},"

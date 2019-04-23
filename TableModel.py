@@ -12,5 +12,5 @@ class tableModel():
 			self.table.setItem(self.table.rowCount()-1, index, QTableWidgetItem(str(item)))
 
 	def clear(self):
-		self.table.clear()
+		self.table.setRowCount(0)
 

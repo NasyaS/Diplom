@@ -1,26 +1,108 @@
 QLabel{
-	font-family: "Bulgarien Ariel";
-	font-weight: bold;
-	font-size: 12px;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
 }
 
+QGroupBox{
+	font-family: "HelveticaNeueCyr";
+	font-weight: bold;
+	font-size: 14px;
+}
 
 QLineEdit{
-	font-family: "Bulgarien Ariel";
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
 	background: white;
-	border-radius: 3px;
-	border-width: 1px;
 	border-style: solid;
+	border-radius: 2px;
+	border-width: 1px;
 	border-color: #96a0ad;
+}
+
+QComboBox{
+	height: 30px;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+	border-style: solid;
+	border-radius: 2px;
+	border-width: 1px;
+	border-color: #3aafda;
+}
+
+QComboBox:disabled{
+	color: #96a0ad;
+	border-color: #96a0ad;
+}
+
+QComboBox:drop-down 
+{
+    border: 0px;
+}
+
+QComboBox:down-arrow {
+    image: url("interface/60995.png");
+    margin-right: 5px;
+    width: 8px;
+    height: 8px;
+}
+
+QComboBox:down-arrow:on {
+	margin-right: 5px;
+    image: url("interface/60696.png");
+    width: 8px;
+    height: 8px;
+}
+
+QListView{
+	height: 30px;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+}
+
+QListView:item{
+	height: 30px;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+	color: black;
+	background: white;
+}
+
+QListView:item:selected{
+	border-style: soild;
+	border-width: 1px;
+	color: white;
+	background: #3aafda;
+}
+
+QPushButton#destroy{
+	background: #ee4f3d;
+	outline: none;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+	font-weight: bold;
+	width: 100px;
+	height: 30px;
+	color: white;
+	border-radius: 3px;
+	border: none;
+}
+
+QPushButton#destroy:hover{
+	background: #ec402d;
+}
+
+QPushButton#destroy:pressed{
+	background: #ee4f3d;
 }
 
 QPushButton{
 	background: #5d9cec;
 	outline: none;
-	font-family: "Bulgarien Ariel";
+	font-family: "HelveticaNeueCyr";
 	font-size: 14px;
+	font-weight: bold;
 	width: 100px;
-	height: 25px;
+	height: 30px;
 	color: white;
 	border-radius: 3px;
 	border: none;
@@ -35,5 +117,121 @@ QPushButton:pressed{
 }
 
 QPushButton:disabled{
-	background: #967adc;
+	background: #96a0ad;
 }
+
+QTabWidget::tab-bar {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+QTabWidget{
+	background: #8cc152;
+}
+
+QTabBar::tab {
+	outline: none;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+    background: white;
+    border: 1px solid #ccd1d9;
+    min-width: 100px;
+    height: 30px;
+}
+
+QTabBar::tab:selected, QTabBar::tab:hover {
+	border: 1px solid #8cc152;
+	color: white;
+    background: #8cc152;
+    height: 30px;
+}
+
+QPushButton#one{
+	background: white;
+	border-radius: 0px;
+	border: 1px solid #c3c3c3;
+	color: black;
+	outline: none;
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+}
+
+QPushButton#one:hover{
+	color: white;
+	background: #5d9cec;
+}
+
+QPushButton#one:pressed{
+	background: #c8cbce;
+}
+
+QPushButton#one:disabled{
+	color: white;
+	background: #5d9cec;
+}
+
+QDoubleSpinBox{
+	font-family: "HelveticaNeueCyr";
+	color: black;
+	font-size: 14px;
+	background: white;
+	border-style: solid;
+	border-radius: 3px;
+	border-width: 1px;
+	border-color: #3aafda;
+}
+
+QDoubleSpinBox:disabled{
+	color: #96a0ad;;
+	border-color: #96a0ad;
+}
+
+QDoubleSpinBox:up-button {
+	background: #5d9cec;
+	width: 15px;
+    border-image: url("interface/up.png") 1;
+}
+
+QDoubleSpinBox:up-button:disabled {
+	background: #96a0ad;
+	width: 15px;
+    border-image: url("interface/up.png") 1;
+}
+
+QDoubleSpinBox:down-button {
+	background: #5d9cec;
+	width: 15px;
+    border-image: url("interface/down.png") 1;
+}
+
+QDoubleSpinBox:down-button:disabled {
+	background: #96a0ad;
+	width: 15px;
+    border-image: url("interface/down.png") 1;
+}
+
+QDoubleSpinBox:up-button:hover {
+	background: #4a89dc;
+	width: 15px;
+    border-image: url("interface/up.png") 1;
+}
+
+QDoubleSpinBox:down-button:hover {
+	background: #4a89dc;
+	width: 15px;
+    border-image: url("interface/down.png") 1;
+}
+
+QTableWidget#tableWidget{
+	border: none;
+    color: black; 
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;  
+	background-color: white
+}
+       
+
+QTableView::item:selected{   
+    background: #f6f9fb;            
+}
+

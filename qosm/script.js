@@ -18,6 +18,32 @@ var icons = [
     'https://a.radikal.ru/a23/1904/c4/1ae8521ab52b.png',
     'https://b.radikal.ru/b17/1904/fc/2f915b55c959.png'];
 
+var colors1 = {
+"Mark 1": '#4193cf', 
+"Mark 2": '#46c34e',
+"Mark 3": '#d13e37',
+"Mark 4": '#cdb639',
+"Mark 5": '#9e39cd',
+"Mark 6": '#ce3a8e',
+"Mark 7": '#cd7838',
+"Mark 8": '#51b7b1',
+"Mark 9": '#92ce3a',
+"Mark 10": '#3a3fce',
+};
+
+var colors2 = {
+"Mark 1":  '#357cad',
+"Mark 2":  '#368f3b',
+"Mark 3":  '#a4322e',
+"Mark 4":  '#a97842',
+"Mark 5":  '#732e97',
+"Mark 6":  '#972e6c',
+"Mark 7":  '#97592e',
+"Mark 8":  '#3e8781',
+"Mark 9":  '#6f972e',
+"Mark 10": '#2e3497'
+};
+
 function initialize(){
 	mymap = L.map('mapid').setView([64.54938070965152, 40.53628921508789], 13);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia25zcm9vIiwiYSI6ImNqczI3dDRncDA2cWc0OXBtM2syaXVtZWoifQ.MSuCCjQY-bmbmXu2bprSSA', {
@@ -72,13 +98,19 @@ function osm_addCircle(rad, key) {
     lng = markers[key].getLatLng().lng
     outer = rad+rad*0.05
     inner = rad-rad*0.05
-    var circle = L.circleDisk([lat, lng], inner, outer).addTo(mymap)
+    var circle = L.circleDisk([lat, lng], inner, outer, {fillcolor: colors1[key], color: colors2[key]}).addTo(mymap)
     circles[key] = circle
 }
 
 function osm_removeCircle(key){
     mymap.removeLayer(circles[key]);
     delete circles[key];
+}
+
+function osm_rmCircles(){
+    for (key in markers){
+        mymap.removeLayer(circles[key]);
+    }
 }
 
 function osm_clear(){

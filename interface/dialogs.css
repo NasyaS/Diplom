@@ -1,5 +1,5 @@
 QDialog{
-	background: #f1f2f6;
+	background: #efefef;
 	border-radius: 3px;
 	border-width: 1px;
 	border-style: solid;
@@ -7,16 +7,22 @@ QDialog{
 }
 
 QLabel{
-	font-family: "Bulgarien Ariel";
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
+}
+
+QLabel#title{
+	font-family: "HelveticaNeueCyr";
 	font-weight: bold;
-	font-size: 12px;
+	font-size: 16px;
 }
 
 
 QLineEdit{
-	font-family: "Bulgarien Ariel";
+	font-family: "HelveticaNeueCyr";
+	font-size: 14px;
 	background: white;
-	border-radius: 3px;
+	border-radius: 2px;
 	border-width: 1px;
 	border-style: solid;
 	border-color: #96a0ad;
@@ -24,35 +30,36 @@ QLineEdit{
 
 QPushButton{
 	outline: none;
-	font-family: "Bulgarien Ariel";
+	font-family: "HelveticaNeueCyr";
+	font-weight: bold;
 	font-size: 14px;
 	width: 100px;
-	height: 25px;
+	height: 30px;
 	color: white;
-	border-radius: 3px;
+	border-radius: 2px;
 	border: none;
 }
 
 QPushButton#Ok{
-	background: #a0d468;
+	background: #4ebd4a;
 }
 
 QPushButton#Ok:hover{
-	background: #8cc152;
+	background: #3da33a;
 }
 
 QPushButton#Ok:pressed{
-	background: #a0d468;
+	background: #4ebd4a;
 }
 
 QPushButton#Cancel{
-	background: #fc6e51;
+	background: #ee4f3d;
 }
 
 QPushButton#Cancel:hover{
-	background: #e9573f;
+	background: #ec402d;
 }
 
 QPushButton#Cancel:pressed{
-	background: #fc6e51;
+	background: #ee4f3d;
 }

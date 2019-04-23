@@ -13,28 +13,20 @@ import qosm
 from qosm.common import QOSM
 from ImageScene import ImageScene
 from TableModel import tableModel
+from AddDialog import AddDialog
 
 #For debug only, delete later
 DEBUG = True
 
-class AddDialog(QDialog):
-	def __init__(self):
-		QDialog.__init__(self)
-		loadUi('AddDialog.ui', self)
-		self.setWindowFlags(Qt.SplashScreen);
-		ok = QPushButton('OK', objectName = 'Ok')
-		cancel = QPushButton('ОТМЕНА', objectName = 'Cancel')
-		self.buttonBox.addButton(ok, QDialogButtonBox.AcceptRole);
-		self.buttonBox.addButton(cancel, QDialogButtonBox.RejectRole);
-		with open('interface/dialogs.css') as f:
-			self.setStyleSheet(f.read())
-
 class Window(QMainWindow):
+
 	def __init__(self):
 		QMainWindow.__init__(self)
-		loadUi(r'ui.ui', self)
+		loadUi('interface/ui.ui', self)
 		with open('interface/main.css') as f:
-			self.setStyleSheet(f.read())
+			ss = f.read()
+			self.setStyleSheet(ss)
+			self.tabPhoto.setStyleSheet(ss)
 		self.createSignals()
 		self.scenes = {}
 		self.init_scene('1')
@@ -42,6 +34,10 @@ class Window(QMainWindow):
 		self.imgs_l.setAlignment(Qt.AlignLeft)
 		self.canvas_sz = (self.canvas.geometry().width(), self.canvas.geometry().height())
 		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние'])
+		self.tableWidget.horizontalHeader().setStretchLastSection(True);
+		self.matrix.setView(QtWidgets.QListView())
+		self.canvas.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 
 ###### Signals and Slots Block
 
@@ -85,6 +81,7 @@ class Window(QMainWindow):
 		self.scene.addPoint(x,y)
 		if not self.scene.full: return
 		self.scene.connect()
+		self.go.setEnabled(True)
 
 	def onMapLClick(self, latitude, longitude):
 		if self.view.markersCount < len(self.scenes):
@@ -93,14 +90,41 @@ class Window(QMainWindow):
 	def add_clicked(self):
 		if len(self.scenes) > 9: return
 		temp = QPushButton(str(len(self.scenes)+1), clicked = self.set_scene)
-		for each in self.findChildren(QtWidgets.QPushButton): 
-			each.setEnabled(True)
+		toEnbl = [str(i) for i in range(1,11,1)]
+		for each in self.findChildren(QtWidgets.QPushButton):
+			if each.text() in toEnbl: 
+				each.setEnabled(True)
 		temp.setEnabled(False)
 		temp.setMinimumSize(60, 30)
 		temp.setMaximumSize(60, 30)
+		with open('interface/Special.css') as f:
+			temp.setStyleSheet(f.read())
 		self.imgs_l.addWidget(temp)
 		self.castling()
+		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
+		self.canvas.setGeometry(0,0,*self.canvas_sz)
 		self.init_scene(str(len(self.scenes)+1))
+
+	pyqtSlot()
+	def on_destroy_clicked(self):
+		self.view.clear()
+		self.height.setValue(0)
+		self.matrix.setCurrentIndex(0)
+		self.model.clear()
+		self.setblock(True)
+		toDel = [str(i) for i in range(2,11,1)]
+		list_ = self.findChildren(QtWidgets.QPushButton)
+		for item in list_:
+			if item.text() in toDel:
+				self.imgs_l.removeWidget(item)
+				item.deleteLater()
+		self.one.setEnabled(False)
+		self.go.setEnabled(False)
+		self.canvas.setGeometry(0,0,*self.canvas_sz)
+		self.path.clear()
+		self.scenes = {}
+		self.init_scene('1')
+				
 
 	def open_dialog(self):
 		temp = QFileDialog.getOpenFileName(
@@ -132,6 +156,12 @@ class Window(QMainWindow):
 
 ###### Interface Manipulations Block
 
+	def setblock(self, val):
+		self.addButton.setEnabled(not val)
+		self.clear.setEnabled(not val)
+		self.matrix.setEnabled(not val)
+		self.height.setEnabled(not val)
+
 	def loadjson(self):
 		self.matrix.clear()
 		with open('data.json') as f:
@@ -139,17 +169,26 @@ class Window(QMainWindow):
 		self.matrix.addItems(self.matrixList.keys())
 
 	def init_scene(self, num):
+		self.height.setValue(0)
+		self.matrix.setCurrentIndex(0)
+		self.setblock(True)
+		self.go.setEnabled(False)
+		self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.scene = ImageScene()
 		self.canvas.setScene(self.scene.current)
 		self.scenes[num] = self.scene
 
+
 	def load_image(self, file_name):
 		self.canvas.resize(*self.canvas_sz)
-		self.scene.load(file_name, self.canvas)
+		self.scene.load(file_name, self.canvas, self.matrix)
 		self.path.setText(file_name)
+		if self.scene.getSize()[0] > self.canvas_sz[0]:
+			self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 		self.canvas.setScene(self.scene.current)
 		self.canvas.setRenderHint(QtGui.QPainter.HighQualityAntialiasing, True)
 		self.canvas.show()
+		self.setblock(False)
 
 	def castling(self):
 		self.imgs_l.removeWidget(self.add)
@@ -160,17 +199,34 @@ class Window(QMainWindow):
 		self.imgs_l.addWidget(self.add)
 
 	def set_scene(self):
+		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
 		sender = self.sender()
 		for each in self.findChildren(QtWidgets.QPushButton): 
 			each.setEnabled(True)
 		sender.setEnabled(False)
 		self.scene = self.scenes[sender.text()]
 		self.canvas.setScene(self.scene.current)
+		if self.scene.drawing: self.setblock(False)
+		else: self.setblock(True)
+		if self.scene.go_enbl: self.go.setEnabled(True)
+		else: self.go.setEnabled(False)
+		if self.scene.getSize()[0] > self.canvas_sz[0]:
+			self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+			self.canvas.setGeometry(0,0, *self.canvas_sz)
+		else:
+			self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+			self.canvas.setGeometry(0,0, *self.scene.getSize())
+		self.height.setValue(self.scene.height)
+		self.matrix.setCurrentIndex(self.scene.comboindex)
 		self.path.setText(self.scene.path)
 
 ###### Calculation Block
 
 	def calc(self):
+		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
+		self.view.removeCircles()
+		self.model.clear()
+
 		for key in self.scenes:
 
 			if DEBUG:
@@ -178,9 +234,8 @@ class Window(QMainWindow):
 				print(obj.path,'\n', obj.exif,'\n', obj.getsize()) #For debug only, delete later
 
 			focalLength = self.scenes[key].exif['FocalLength'][0]/self.scenes[key].exif['FocalLength'][1]
-			building_height = float(self.height.text())
-			size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.currentText()].split('x'))))*self.scenes[key].get_lenline())/np.max((self.scenes[key].getsize()))
+			size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl)/np.max((self.scenes[key].getsize()))
 			distance = focalLength * \
-			((building_height/size_on_matrix)+1)
+			((self.scenes[key].height/size_on_matrix)+1)
 			self.view.addCircle(distance, "Mark "+key)
-			self.model.insert([key, distance])
+			self.model.insert([key, np.round(distance,3)])

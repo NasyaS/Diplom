@@ -10,7 +10,7 @@ from window import Window
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication(sys.argv)
-	QtGui.QFontDatabase.addApplicationFont('interface/12948.otf')
+	QtGui.QFontDatabase.addApplicationFont('interface/HelveticaNeueCyr-Light.ttf')
 	mainWin = Window()
 	mainWin.show()
 	sys.exit(app.exec_())
