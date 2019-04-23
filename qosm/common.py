@@ -78,6 +78,7 @@ class QOSM(QWebEngineView):
 
 
     def clear(self):
+        self.markersCount = 0
         self.page().runJavaScript("osm_clear()")    	
 
     def waitUntilReady(self):

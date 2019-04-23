@@ -114,6 +114,7 @@ function osm_rmCircles(){
 }
 
 function osm_clear(){
+    m_c = 0;
     for (key in markers){
         mymap.removeLayer(circles[key]);
         mymap.removeLayer(markers[key]);
