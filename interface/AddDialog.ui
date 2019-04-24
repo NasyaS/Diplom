@@ -32,7 +32,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Название</string>
+       <string>Название устройства</string>
       </property>
      </widget>
     </item>
@@ -58,7 +58,7 @@
        </size>
       </property>
       <property name="text">
-       <string>Размер Матрицы</string>
+       <string>Размер Матрицы (в мм)</string>
       </property>
      </widget>
     </item>

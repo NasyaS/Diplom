@@ -33,8 +33,8 @@ class Window(QMainWindow):
 		self.loadjson()
 		self.imgs_l.setAlignment(Qt.AlignLeft)
 		self.canvas_sz = (self.canvas.geometry().width(), self.canvas.geometry().height())
-		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние'])
-		self.tableWidget.horizontalHeader().setStretchLastSection(True);
+		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние (м)'])
+		self.tableWidget.horizontalHeader().setStretchLastSection(True)
 		self.matrix.setView(QtWidgets.QListView())
 		self.canvas.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)

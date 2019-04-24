@@ -128,7 +128,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Высота здания</string>
+                <string>Высота здания (в метрах)</string>
                </property>
                <property name="margin">
                 <number>5</number>
