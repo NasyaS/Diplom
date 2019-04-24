@@ -127,9 +127,8 @@ class Window(QMainWindow):
 				
 
 	def open_dialog(self):
-		temp = QFileDialog.getOpenFileName(
-			self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
-		self.load_image(temp)
+		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
+		if temp: self.load_image(temp)
 
 	@pyqtSlot()
 	def on_clear_clicked(self):
