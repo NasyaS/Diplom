@@ -128,7 +128,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Высота здания (в метрах)</string>
+                <string>Высота ориентира (в метрах)</string>
                </property>
                <property name="margin">
                 <number>5</number>
@@ -145,6 +145,12 @@
                  <width>0</width>
                  <height>30</height>
                 </size>
+               </property>
+               <property name="maximum">
+                <double>999.990000000000009</double>
+               </property>
+               <property name="value">
+                <double>0.000000000000000</double>
                </property>
               </widget>
              </item>
@@ -176,7 +182,7 @@
                 </size>
                </property>
                <property name="text">
-                <string>Размер матрицы</string>
+                <string>Размер матрицы устройства</string>
                </property>
                <property name="margin">
                 <number>5</number>
@@ -233,6 +239,19 @@ QScrollBar::left-arrow:vertical, QScrollBar::right-arrow:vertical {
               </widget>
              </item>
             </layout>
+           </widget>
+           <widget class="QCheckBox" name="checkBox">
+            <property name="geometry">
+             <rect>
+              <x>10</x>
+              <y>290</y>
+              <width>151</width>
+              <height>17</height>
+             </rect>
+            </property>
+            <property name="text">
+             <string>Отметить объект</string>
+            </property>
            </widget>
           </widget>
          </item>
@@ -303,7 +322,7 @@ QTableView::item {
         <string notr="true"/>
        </property>
        <property name="currentIndex">
-        <number>0</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="tabPhoto">
         <attribute name="title">
