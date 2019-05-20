@@ -12,9 +12,9 @@ class ImageScene():
 		self.drawing = False
 		self.go_enbl = False
 		self.path = ''
-		self.height = 0
+		self.height = []
 		self.coords = []
-		self.lenl = 0
+		self.lenl = []
 		self.comboindex = 0
 		img = QPixmap('interface/start.png')
 		self.current = QGraphicsScene(0, 0, img.size().width(), img.size().height())
@@ -24,6 +24,7 @@ class ImageScene():
 		self.current.clear()
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
 		self.coords = []
+		self.lenl = []
 		self.full = False
 		self.go_enbl = False
 
@@ -46,11 +47,11 @@ class ImageScene():
 
 	def get_lenline(self):
 		scale = lambda w, h: np.array((w*self.sz[0]/self.pixmap.size().width(), h*self.sz[1]/self.pixmap.size().height()))
-		print(self.coords)
 		M1, M2 = [scale(*item) for item in self.coords]
 		self.coords = []
 		self.full = False
-		self.lenl = np.linalg.norm(M2-M1)
+		self.lenl.append(np.linalg.norm(M2-M1))
+		print(self.lenl)
 
 	def load(self, path, canvas, combo):
 		image = Image.open(path)
@@ -72,12 +73,14 @@ class ImageScene():
 		if index >= 0: combo.setCurrentIndex(index)
 
 	def addPoint(self, x, y):
+		Pen = QtCore.Qt.red if not self.lenl else QtCore.Qt.green
 		self.coords.append((x,y))
 		if len(self.coords) == 2: self.full = True
-		self.current.addEllipse(x-2.5, y-2.5, 5, 5, QPen(QtCore.Qt.red), QtCore.Qt.red)
+		self.current.addEllipse(x-2.5, y-2.5, 5, 5, QPen(Pen), Pen)
 
 	def connect(self):
-		self.current.addLine(*self.coords[1], *self.coords[0], QPen(QtCore.Qt.red, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
+		Pen = QtCore.Qt.red if not self.lenl else QtCore.Qt.green
+		self.current.addLine(*self.coords[1], *self.coords[0], QPen(Pen, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
 		self.get_lenline()
 		self.go_enbl = True
 

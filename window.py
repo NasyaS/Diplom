@@ -78,6 +78,7 @@ class Window(QMainWindow):
 		if not self.scene.drawing: self.open_dialog(); return
 		x, y = event.x()+self.canvas.horizontalScrollBar().sliderPosition(), event.y() + \
 			self.canvas.verticalScrollBar().sliderPosition()
+		if len(self.scene.lenl) == 2: self.scene.clear() 
 		self.scene.addPoint(x,y)
 		if not self.scene.full: return
 		self.scene.connect()
@@ -160,6 +161,7 @@ class Window(QMainWindow):
 		self.clear.setEnabled(not val)
 		self.matrix.setEnabled(not val)
 		self.height.setEnabled(not val)
+		self.height2.setEnabled(not val)
 
 	def loadjson(self):
 		self.matrix.clear()
@@ -222,7 +224,7 @@ class Window(QMainWindow):
 ###### Calculation Block
 
 	def calc(self):
-		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
+		self.scene.setHeight([self.height.value(), self.height2.value()], self.matrix.currentIndex())
 		self.view.removeCircles()
 		self.model.clear()
 
@@ -233,8 +235,18 @@ class Window(QMainWindow):
 				print(obj.path,'\n', obj.exif,'\n', obj.getsize()) #For debug only, delete later
 
 			focalLength = self.scenes[key].exif['FocalLength'][0]/self.scenes[key].exif['FocalLength'][1]
-			size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl)/np.max((self.scenes[key].getsize()))
-			distance = focalLength * \
-			((self.scenes[key].height/size_on_matrix)+1)
+			if len(self.scenes[key].lenl) == 1:
+				size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[0])/np.max((self.scenes[key].getsize()))
+				distance = focalLength * \
+				((self.scenes[key].height[0]/size_on_matrix)+1)
+			else:
+				size_on_matrix1 = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[0])/np.max((self.scenes[key].getsize()))
+				size_on_matrix2 = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[1])/np.max((self.scenes[key].getsize()))
+				distance1 = focalLength * \
+				((self.scenes[key].height[0]/size_on_matrix1)+1)
+				distance2 = focalLength * \
+				((self.scenes[key].height[1]/size_on_matrix2)+1)
+				distance = distance1 - distance2
+
 			self.view.addCircle(distance, "Mark "+key)
 			self.model.insert([key, np.round(distance,3)])
