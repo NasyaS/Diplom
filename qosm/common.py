@@ -4,8 +4,8 @@ import os
 import sys
 
 import decorator
-from PyQt5 import QtCore, QtGui, QtNetwork, QtWebChannel, QtWidgets
-from PyQt5.QtCore import QObject, QSize, Qt, QUrl, pyqtSignal, pyqtSlot
+from PyQt5 import QtCore, QtGui, QtNetwork, QtWebChannel, QtWidgets #QJsonArray, QJsonValue
+from PyQt5.QtCore import QObject, QSize, Qt, QUrl, pyqtSignal, pyqtSlot, QJsonValue
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkDiskCache
 from PyQt5.QtWebChannel import QWebChannel
 from PyQt5.QtWebEngineWidgets import (QWebEnginePage, QWebEngineScript,
@@ -52,6 +52,7 @@ class QOSM(QWebEngineView):
     def __init__(self, parent):
         super(QOSM, self).__init__(parent)
         self.markersCount = 0
+        self.creature = []
         self.manager = QNetworkAccessManager()
         self.cache = QNetworkDiskCache()
         self.cache.setCacheDirectory("cache")
@@ -79,6 +80,7 @@ class QOSM(QWebEngineView):
 
     def clear(self):
         self.markersCount = 0
+        self.creature = []
         self.page().runJavaScript("osm_clear()")    	
 
     def waitUntilReady(self):
@@ -94,12 +96,16 @@ class QOSM(QWebEngineView):
     def setZoom(self, zoom):
         self.page().runJavaScript("osm_setZoom({})".format(zoom))
 
+    def getCoords(self):
+        return self.creature
+
     def center(self):
         center = self.page().runJavaScript("osm_getCenter()")
         return center['lat'], center['lng']
 
     def addMarker(self, key, latitude, longitude, **extra):
         self.markersCount+=1
+        self.creature.append([key, latitude, longitude])
         return self.page().runJavaScript("osm_addMarker(key={!r},"
                                          "latitude= {}, "
                                          "longitude= {}, {});".format(key, latitude, longitude, json.dumps(extra)))
@@ -108,6 +114,8 @@ class QOSM(QWebEngineView):
         return self.page().runJavaScript("osm_deleteMarker(key={!r});".format(key))
 
     def addCircle(self, radius, key):
+        for item in self.creature:
+            if item[0] == key: item.append(radius)
         return self.page().runJavaScript("osm_addCircle({},key={!r})".format(radius, key))
 
     def removeCircles(self):
@@ -126,6 +134,10 @@ class QOSM(QWebEngineView):
 
     @pyqtSlot(str, float, float)
     def markerIsMoved(self, key, lat, lng):
+        for item in self.creature:
+            if item[0] == key:
+                item[1], item[2] = lat, lng
+        print(self.creature)
         self.markerMoved.emit(key, lat, lng)
 
     @pyqtSlot(str, float, float)
@@ -139,6 +151,7 @@ class QOSM(QWebEngineView):
     @pyqtSlot(str, float, float)
     def markerIsRClicked(self, key, lat, lng):
         self.markerRightClicked.emit(key, lat, lng)
+
 
 # -----------map signals
 

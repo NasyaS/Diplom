@@ -69,7 +69,7 @@
               <x>0</x>
               <y>20</y>
               <width>241</width>
-              <height>311</height>
+              <height>321</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -268,7 +268,7 @@ QScrollBar::left-arrow:vertical, QScrollBar::right-arrow:vertical {
                <property name="minimumSize">
                 <size>
                  <width>0</width>
-                 <height>20</height>
+                 <height>30</height>
                 </size>
                </property>
                <property name="styleSheet">
@@ -350,11 +350,11 @@ QTableView::item {
         <string notr="true"/>
        </property>
        <property name="currentIndex">
-        <number>1</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="tabPhoto">
         <attribute name="title">
-         <string>Фотография</string>
+         <string>Расчёт</string>
         </attribute>
         <widget class="QGraphicsView" name="canvas">
          <property name="geometry">
@@ -457,6 +457,55 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
          </layout>
         </widget>
        </widget>
+       <widget class="QWidget" name="tab">
+        <attribute name="title">
+         <string>Проверка</string>
+        </attribute>
+        <widget class="QGraphicsView" name="canvas_2">
+         <property name="geometry">
+          <rect>
+           <x>0</x>
+           <y>0</y>
+           <width>595</width>
+           <height>611</height>
+          </rect>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QScrollBar:vertical{
+    background: white;
+	width: 6px;
+}
+
+QScrollBar:horizontal{
+    background: white;
+	height: 6px;
+}
+
+QScrollBar::handle:vertical{
+    background: rgba(58, 175, 218,50%);
+	border-style: solid;
+	border-radius: 3px;
+    width: 6px;
+}
+
+QScrollBar::handle:horizontal{
+    background: rgba(58, 175, 218,50%);
+	border-style: solid;
+	border-radius: 3px;
+    height: 6px;
+}
+
+QScrollBar::left-arrow:vertical, QScrollBar::right-arrow:vertical{
+    height: 1px;
+}
+
+QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
+    width: 1px;
+}
+</string>
+         </property>
+        </widget>
+       </widget>
        <widget class="QWidget" name="tabMap">
         <attribute name="title">
          <string>Карта</string>
@@ -475,6 +524,135 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
       </widget>
      </item>
     </layout>
+   </widget>
+   <widget class="QGroupBox" name="groupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>0</y>
+      <width>241</width>
+      <height>403</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>300</height>
+     </size>
+    </property>
+    <property name="title">
+     <string>Проверка</string>
+    </property>
+    <widget class="QWidget" name="verticalLayoutWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>20</y>
+       <width>241</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="spacing">
+       <number>6</number>
+      </property>
+      <property name="leftMargin">
+       <number>5</number>
+      </property>
+      <property name="topMargin">
+       <number>5</number>
+      </property>
+      <property name="rightMargin">
+       <number>5</number>
+      </property>
+      <property name="bottomMargin">
+       <number>5</number>
+      </property>
+      <item>
+       <widget class="QLineEdit" name="path_2">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>Путь к файлу</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_5">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Карта</string>
+        </property>
+        <property name="margin">
+         <number>5</number>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="load">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Загрузить состояние</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="save">
+        <property name="enabled">
+         <bool>true</bool>
+        </property>
+        <property name="styleSheet">
+         <string notr="true"/>
+        </property>
+        <property name="text">
+         <string>Сохранить состояние</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="check">
+        <property name="enabled">
+         <bool>false</bool>
+        </property>
+        <property name="text">
+         <string>Проверка</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </widget>
   </widget>
  </widget>

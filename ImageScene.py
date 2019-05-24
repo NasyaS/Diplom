@@ -3,6 +3,7 @@ from PyQt5.QtGui import QBrush, QPen, QPixmap
 from PyQt5.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize, Qt
+from GpsInfo import getlatlngs
 import numpy as np
 
 
@@ -51,7 +52,6 @@ class ImageScene():
 		self.coords = []
 		self.full = False
 		self.lenl.append(np.linalg.norm(M2-M1))
-		print(self.lenl)
 
 	def load(self, path, canvas, combo):
 		image = Image.open(path)
@@ -83,5 +83,8 @@ class ImageScene():
 		self.current.addLine(*self.coords[1], *self.coords[0], QPen(Pen, 3, Qt.SolidLine, Qt.SquareCap, Qt.RoundJoin))
 		self.get_lenline()
 		self.go_enbl = True
+
+	def getLatLng(self):
+		return getlatlngs(self.exif)
 
 

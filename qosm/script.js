@@ -2,6 +2,7 @@
 var mymap;
 var circles = [];
 var markers = [];
+var checkMarker;
 var qtWidget;
 
 var m_c = 0;
@@ -114,16 +115,35 @@ function osm_rmCircles(){
 }
 
 function osm_clear(){
+    if (checkMarker) mymap.removeLayer(checkMarker)
     m_c = 0;
     for (key in markers){
-        mymap.removeLayer(circles[key]);
+        if (circles[key]) mymap.removeLayer(circles[key]);
         mymap.removeLayer(markers[key]);
     }
     circles = []
     markers = []
 }
 
+
+function osm_addCheckMarker(latitude, longitude, parameters){
+    if (checkMarker) mymap.removeLayer(checkMarker)
+        parameters["icon"] = new L.icon({
+        iconUrl:     "https://a.radikal.ru/a32/1905/ae/3424de280f1e.png",
+        //iconRetinaUrl: "lightblue_.png",
+        shadowUrl:     "https://d.radikal.ru/d28/1904/db/8ba68aad1ea2.png",
+        iconSize:    [25, 41],
+        iconAnchor:  [12, 41],
+        popupAnchor: [1, -34],
+        tooltipAnchor: [16, -28],
+        shadowSize:  [41, 41]
+        });
+    checkMarker = L.marker([latitude, longitude], parameters).addTo(mymap);
+}
+
 function osm_addMarker(key, latitude, longitude, parameters){
+
+    if (key == "check") return osm_addCheckMarker(latitude, longitude, parameters)
 
     if (key in markers) {
         osm_deleteMarker(key);
@@ -139,7 +159,8 @@ function osm_addMarker(key, latitude, longitude, parameters){
         tooltipAnchor: [16, -28],
         shadowSize:  [41, 41]
         });
-
+    parameters["draggable"] = 'true'
+    
     var marker = L.marker([latitude, longitude], parameters).addTo(mymap);
 
     m_c++

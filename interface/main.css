@@ -108,6 +108,22 @@ QPushButton{
 	border: none;
 }
 
+QPushButton#check{
+	background: #4ebd4a;
+}
+
+QPushButton#check:hover{
+	background: #3da33a;
+}
+
+QPushButton#check:pressed{
+	background: #4ebd4a;
+}
+
+QPushButton#check:disabled{
+	background: #96a0ad;
+}
+
 QPushButton:hover{
 	background: #4a89dc;
 }

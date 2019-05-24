@@ -16,7 +16,7 @@ from TableModel import tableModel
 from AddDialog import AddDialog
 
 #For debug only, delete later
-DEBUG = True
+DEBUG = False
 
 class Window(QMainWindow):
 
@@ -38,6 +38,13 @@ class Window(QMainWindow):
 		self.matrix.setView(QtWidgets.QListView())
 		self.canvas.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 		self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.canvas_2.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.canvas_2.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+		self.verticalLayout_3.addWidget(self.groupBox_2)
+		self.groupBox_2.setVisible(False)
+		self.tabWidget.currentChanged.connect(self.onTabChange)
+		self.checkscene = ImageScene()
+		self.canvas_2.setScene(self.checkscene.current)
 
 ###### Signals and Slots Block
 
@@ -49,6 +56,10 @@ class Window(QMainWindow):
 		self.canvas.dropEvent = self.dropmode
 		self.canvas.dragEnterEvent = self.dEE
 		self.canvas.dragMoveEvent = self.dME
+		self.canvas_2.mousePressEvent = self.drawmode2
+		self.canvas_2.dropEvent = self.dropmode
+		self.canvas_2.dragEnterEvent = self.dEE
+		self.canvas_2.dragMoveEvent = self.dME
 		self.view.mapClicked.connect(self.onMapLClick)
 
 	def dEE(self, event):
@@ -73,6 +84,35 @@ class Window(QMainWindow):
 			self.load_image(temp)  
 		else:
 			event.ignore()
+
+	def dropmode2(self, event):
+		if event.mimeData().hasUrls:
+			event.setDropAction(QtCore.Qt.CopyAction)
+			event.accept()
+			for url in event.mimeData().urls():
+				temp = str(url.toLocalFile())
+			self.canvas_2.resize(*self.canvas_sz)
+			self.checkscene.load(temp, self.canvas_2, self.matrix)
+			self.path_2.setText(file_name)
+			if self.checkscene.getSize()[0] > self.canvas_sz[0]:
+				self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+			self.canvas_2.setScene(self.checkscene.current)
+			self.canvas_2.show()
+			self.check.setEnabled(True)
+		else:
+			event.ignore()
+
+	def drawmode2(self, event):
+		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
+		if not temp: return
+		self.canvas_2.resize(*self.canvas_sz)
+		self.checkscene.load(temp, self.canvas_2, self.matrix)
+		self.path_2.setText(temp)
+		if self.checkscene.getSize()[0] > self.canvas_sz[0]:
+			self.canvas_2.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+		self.canvas_2.setScene(self.checkscene.current)
+		self.canvas_2.show()
+		self.check.setEnabled(True)
 
 	def drawmode(self, event):
 		if not self.scene.drawing: self.open_dialog(); return
@@ -102,7 +142,7 @@ class Window(QMainWindow):
 			temp.setStyleSheet(f.read())
 		self.imgs_l.addWidget(temp)
 		self.castling()
-		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
+		self.scene.setHeight([self.height.value(), self.height2.value()], self.matrix.currentIndex())
 		self.canvas.setGeometry(0,0,*self.canvas_sz)
 		self.init_scene(str(len(self.scenes)+1))
 
@@ -122,9 +162,13 @@ class Window(QMainWindow):
 		self.one.setEnabled(False)
 		self.go.setEnabled(False)
 		self.canvas.setGeometry(0,0,*self.canvas_sz)
+		self.canvas_2.setGeometry(0,0,*self.canvas_sz)
 		self.path.clear()
 		self.scenes = {}
 		self.init_scene('1')
+		self.checkscene = ImageScene()
+		self.canvas_2.setScene(self.checkscene.current)
+		self.check.setEnabled(False)
 				
 
 	def open_dialog(self):
@@ -154,7 +198,20 @@ class Window(QMainWindow):
 			json.dump(data, f)
 		self.loadjson()
 
+	def onTabChange(self, i):
+		if i != 0:
+			self.groupBox.setVisible(False)
+			self.groupBox_2.setVisible(True)
+		else:
+			self.groupBox_2.setVisible(False)
+			self.groupBox.setVisible(True)
+
+	def keyPressEvent(self, event):
+		if event.key() == QtCore.Qt.Key_Delete:
+			self.scene.clear()
+
 ###### Interface Manipulations Block
+
 
 	def setblock(self, val):
 		self.addButton.setEnabled(not val)
@@ -200,7 +257,7 @@ class Window(QMainWindow):
 		self.imgs_l.addWidget(self.add)
 
 	def set_scene(self):
-		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
+		self.scene.setHeight([self.height.value(), self.height2.value()], self.matrix.currentIndex())
 		sender = self.sender()
 		for each in self.findChildren(QtWidgets.QPushButton): 
 			each.setEnabled(True)
@@ -217,11 +274,48 @@ class Window(QMainWindow):
 		else:
 			self.canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
 			self.canvas.setGeometry(0,0, *self.scene.getSize())
-		self.height.setValue(self.scene.height)
+		self.height.setValue(self.scene.height[0])
+		self.height2.setValue(self.scene.height[1])
 		self.matrix.setCurrentIndex(self.scene.comboindex)
 		self.path.setText(self.scene.path)
 
 ###### Calculation Block
+
+	@pyqtSlot()
+	def on_save_clicked(self):
+		coords, saves = self.view.getCoords(), ""
+		for item in coords:
+			for jtem in item:
+				saves+=str(jtem)+':'
+			saves+='\n'
+		temp = QFileDialog.getSaveFileName(self, 'Save file', '', 'Osm Files (*.osm)')[0]
+		if not temp: return
+		with open(temp, "w") as f:
+			f.write(saves)
+
+	@pyqtSlot()
+	def on_load_clicked(self):
+		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Osm Files (*.osm)')[0]
+		if not temp: return
+		with open(temp) as f:
+			file = f.read()
+		file = file.split('\n')
+		result = []
+		for item in file: result.append(item.split(':'))
+		cnt = 1
+		for item in result:
+			if item[0] == '': continue
+			self.view.addMarker(item[0], float(item[1]), float(item[2]))
+			if item[3] != '':
+				self.view.addCircle(float(item[3]), item[0])
+				self.model.insert([str(cnt),float(item[3])])
+			cnt+=1
+
+	def on_check_clicked(self):
+		self.tabWidget.setCurrentIndex(2)
+		lat, lng = self.checkscene.getLatLng()
+		self.view.addMarker("check", lat, lng)
+		self.view.centerAt(lat, lng)
 
 	def calc(self):
 		self.scene.setHeight([self.height.value(), self.height2.value()], self.matrix.currentIndex())
