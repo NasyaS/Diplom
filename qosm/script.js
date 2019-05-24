@@ -108,9 +108,14 @@ function osm_removeCircle(key){
     delete circles[key];
 }
 
-function osm_rmCircles(){
+function osm_rmCircles(mc){
+    var marr = []
+    for (var i = mc-1; i <=10; i++){
+        marr.push("Mark "+i)
+    }
     for (key in markers){
-        mymap.removeLayer(circles[key]);
+        if (marr.includes(key)) mymap.removeLayer(markers[key])
+        if (circles[key]) mymap.removeLayer(circles[key]);
     }
 }
 
@@ -119,7 +124,7 @@ function osm_clear(){
     m_c = 0;
     for (key in markers){
         if (circles[key]) mymap.removeLayer(circles[key]);
-        mymap.removeLayer(markers[key]);
+        if (markers[key]) mymap.removeLayer(markers[key]);
     }
     circles = []
     markers = []

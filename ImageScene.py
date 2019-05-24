@@ -13,13 +13,16 @@ class ImageScene():
 		self.drawing = False
 		self.go_enbl = False
 		self.path = ''
-		self.height = []
+		self.height = 0
 		self.coords = []
 		self.lenl = []
 		self.comboindex = 0
 		img = QPixmap('interface/start.png')
 		self.current = QGraphicsScene(0, 0, img.size().width(), img.size().height())
 		self.current.addItem(QGraphicsPixmapItem(img))
+
+	def good(self):
+		return True if self.lenl else False
 
 	def clear(self):
 		self.current.clear()
