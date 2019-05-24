@@ -34,3 +34,4 @@ def getlatlngs(info):
 		if gps[1] != "N": lat = 0 - lat
 		if gps[3] != "E": lng = 0 - lng
 	return lat, lng
+	
