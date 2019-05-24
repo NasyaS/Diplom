@@ -251,6 +251,7 @@ class Window(QMainWindow):
 		self.right.setVisible(val)
 		self.img.setVisible(val)
 
+
 	@pyqtSlot()
 	def on_how_clicked(self):
 		if self.how.text() == "x":
@@ -259,33 +260,40 @@ class Window(QMainWindow):
 			self.how.setText("?")
 		else:
 			self.how.setText("x")
-			self.imgs = []
-			self.curInd = 0
 			with open("docs.bin") as f:
 				string = f.read()
-			array = string.split("SPLITIXFORIX")
-			for i in range(len(array)):
-				image = Image.open(BytesIO(base64.b64decode(array[i])))
-				qim = ImageQt(image)
-				pix = QtGui.QPixmap.fromImage(qim)
-				self.imgs.append(pix)
-			self.img.setGeometry(QRect(0,0,890,730))
-			self.img.setPixmap(self.imgs[0])
+			image = Image.open(BytesIO(base64.b64decode(string)))
+			qim = ImageQt(image)
+			self.curInd = 0
+			pix = QtGui.QPixmap.fromImage(qim)
+			self.img.setGeometry(QRect(0,0, 6230, 730))
+			self.img.setPixmap(pix)
 			self.left.setGeometry(QRect(10, 340, 24, 100))
 			self.right.setGeometry(QRect(855, 340, 24, 100))
 			self.setGroupVis(True)
+			print('gh')
 
 	@pyqtSlot()
 	def on_right_clicked(self):
+		print('bz rig', self.curInd)
 		if self.curInd != 6:
+			self.ranim = QPropertyAnimation(self.img, b"geometry")
+			self.ranim.setDuration(500)
+			self.ranim.setStartValue(QRect(-self.curInd*890, 0, 6230, 730))
+			self.ranim.setEndValue(QRect(-self.curInd*890-890, 0, 6230, 730))
+			self.ranim.start()
 			self.curInd+=1
-			self.img.setPixmap(self.imgs[self.curInd])
 
 	@pyqtSlot()
 	def on_left_clicked(self):
-		if self.curInd != 0: 
+		print('bz lef', self.curInd)
+		if self.curInd != 0:
+			self.lanim = QPropertyAnimation(self.img, b"geometry")
+			self.lanim.setDuration(500)
+			self.lanim.setStartValue(QRect(-self.curInd*890, 0, 6230, 730))
+			self.lanim.setEndValue(QRect(-self.curInd*890+890, 0, 6230, 730))
+			self.lanim.start()
 			self.curInd-=1
-			self.img.setPixmap(self.imgs[self.curInd])
 
 	def throwerror(self, error):
 		self.err_label.setText("Ошибка: "+error)
