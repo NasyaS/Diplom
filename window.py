@@ -4,9 +4,13 @@ import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import QSize, Qt, pyqtSlot, QTimer, QPropertyAnimation, QRect
 from PyQt5.QtGui import QBrush, QPen, QPixmap
-from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsScene, QDialogButtonBox,
+from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsView, QGraphicsScene, QDialogButtonBox,
 							 QLabel, QMainWindow, QPushButton, QDialog)
 from PyQt5.uic import loadUi
+import base64
+from io import BytesIO
+from PIL import Image
+from PIL.ImageQt import ImageQt
 
 import cv2
 import qosm
@@ -45,6 +49,7 @@ class Window(QMainWindow):
 		self.tabWidget.currentChanged.connect(self.onTabChange)
 		self.checkscene = ImageScene()
 		self.canvas_2.setScene(self.checkscene.current)
+		self.setGroupVis(False)
 
 ###### Signals and Slots Block
 
@@ -240,6 +245,47 @@ class Window(QMainWindow):
 			self.scene.clear()
 
 ###### Interface Manipulations Block
+
+	def setGroupVis(self, val):
+		self.left.setVisible(val)
+		self.right.setVisible(val)
+		self.img.setVisible(val)
+
+	@pyqtSlot()
+	def on_how_clicked(self):
+		if self.how.text() == "x":
+			self.img.setGeometry(QRect(0,0,1,1))
+			self.setGroupVis(False)
+			self.how.setText("?")
+		else:
+			self.how.setText("x")
+			self.imgs = []
+			self.curInd = 0
+			with open("docs.bin") as f:
+				string = f.read()
+			array = string.split("SPLITIXFORIX")
+			for i in range(len(array)):
+				image = Image.open(BytesIO(base64.b64decode(array[i])))
+				qim = ImageQt(image)
+				pix = QtGui.QPixmap.fromImage(qim)
+				self.imgs.append(pix)
+			self.img.setGeometry(QRect(0,0,890,730))
+			self.img.setPixmap(self.imgs[0])
+			self.left.setGeometry(QRect(10, 340, 24, 100))
+			self.right.setGeometry(QRect(855, 340, 24, 100))
+			self.setGroupVis(True)
+
+	@pyqtSlot()
+	def on_right_clicked(self):
+		if self.curInd != 6:
+			self.curInd+=1
+			self.img.setPixmap(self.imgs[self.curInd])
+
+	@pyqtSlot()
+	def on_left_clicked(self):
+		if self.curInd != 0: 
+			self.curInd-=1
+			self.img.setPixmap(self.imgs[self.curInd])
 
 	def throwerror(self, error):
 		self.err_label.setText("Ошибка: "+error)
