@@ -169,6 +169,7 @@ class Window(QMainWindow):
 		self.checkscene = ImageScene()
 		self.canvas_2.setScene(self.checkscene.current)
 		self.check.setEnabled(False)
+		self.path_2.setText("")
 				
 
 	def open_dialog(self):
@@ -311,11 +312,15 @@ class Window(QMainWindow):
 				self.model.insert([str(cnt),float(item[3])])
 			cnt+=1
 
+	@pyqtSlot()
 	def on_check_clicked(self):
-		self.tabWidget.setCurrentIndex(2)
 		lat, lng = self.checkscene.getLatLng()
-		self.view.addMarker("check", lat, lng)
-		self.view.centerAt(lat, lng)
+		if lat and lng:
+			self.tabWidget.setCurrentIndex(2)
+			self.view.addMarker("check", lat, lng)
+			self.view.centerAt(lat, lng)
+		else:
+			print("No Gps data")
 
 	def calc(self):
 		self.scene.setHeight([self.height.value(), self.height2.value()], self.matrix.currentIndex())

@@ -12,7 +12,8 @@ def to_deg(value):
 	degs = [ frac(value[i]) for i in range(len(value))]
 	return degs[0] + (degs[1]/60.0) + (degs[2] / 3600.0)
 
-def getlatlngs(info, exif_data = {}):
+def getlatlngs(info):
+	exif_data = {}
 	targets, g = ["GPSLatitude", 'GPSLatitudeRef', 'GPSLongitude', 'GPSLongitudeRef'], "GPSInfo"
 	if not info: return
 	for tag, value in info.items():
