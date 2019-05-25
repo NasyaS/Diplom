@@ -1,8 +1,4 @@
 import sys, os
-
-import numpy as np
-import PIL.ExifTags
-from PIL import Image, ImageDraw
 from PyQt5 import QtWidgets, QtGui
 
 import cv2

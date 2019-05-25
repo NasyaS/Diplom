@@ -15,6 +15,7 @@ from PIL.ImageQt import ImageQt
 import cv2
 import qosm
 from qosm.common import QOSM
+from mathlogic import distance
 from ImageScene import ImageScene
 from TableModel import tableModel
 from AddDialog import AddDialog
@@ -398,32 +399,18 @@ class Window(QMainWindow):
 			return self.throwerror("Не хватает маркеров")
 
 		for key in self.scenes:
-
 			if not self.scenes[key].good():
 				self.throwerror("Не готова сцена "+key)
 				continue
-
 			if not self.scenes[key].exif:
 				self.throwerror("Не найден exif файл в сцене "+key)
 				continue
-
+				
 			if DEBUG:
 				obj = self.scenes[key]
 				print(obj.path,'\n', obj.exif,'\n', obj.getsize()) #For debug only, delete later
 
-			focalLength = self.scenes[key].exif['FocalLength'][0]/self.scenes[key].exif['FocalLength'][1]
-			if len(self.scenes[key].lenl) == 1:
-				size_on_matrix = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[0])/np.max((self.scenes[key].getsize()))
-				distance = focalLength * \
-				((self.scenes[key].height/size_on_matrix)+1)
-			else:
-				size_on_matrix1 = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[0])/np.max((self.scenes[key].getsize()))
-				size_on_matrix2 = (np.max(list(map(float, self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))))*self.scenes[key].lenl[1])/np.max((self.scenes[key].getsize()))
-				distance1 = focalLength * \
-				((self.scenes[key].height/size_on_matrix1)+1)
-				distance2 = focalLength * \
-				((pheight/size_on_matrix2)+1)
-				distance = distance1 - distance2
+			dist = distance(self.scenes[key], self.matrixList[self.matrix.itemText(self.scenes[key].comboindex)].split('x'))
 
-			self.view.addCircle(distance, "Mark "+key)
-			self.model.insert([key, np.round(distance,3)])
+			self.view.addCircle(dist, "Mark "+key)
+			self.model.insert([key, np.round(dist,3)])
