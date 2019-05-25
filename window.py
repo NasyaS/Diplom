@@ -393,7 +393,6 @@ class Window(QMainWindow):
 		self.view.removeCircles()
 		self.view.removefakes(len(self.scenes))
 		self.model.clear()
-		pheight = 1.65
 
 		if self.checkmarkers() > self.view.markersCount:
 			return self.throwerror("Не хватает маркеров")
