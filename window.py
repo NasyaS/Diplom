@@ -62,7 +62,7 @@ class Window(QMainWindow):
 		self.canvas.dragEnterEvent = self.dEE
 		self.canvas.dragMoveEvent = self.dME
 		self.canvas_2.mousePressEvent = self.drawmode2
-		self.canvas_2.dropEvent = self.dropmode
+		self.canvas_2.dropEvent = self.dropmode2
 		self.canvas_2.dragEnterEvent = self.dEE
 		self.canvas_2.dragMoveEvent = self.dME
 		self.view.mapClicked.connect(self.onMapLClick)
@@ -403,7 +403,7 @@ class Window(QMainWindow):
 				continue
 
 			if not self.scenes[key].exif:
-				self.throwerror("Не найден exif файл в изображении "+key)
+				self.throwerror("Не найден exif файл в сцене "+key)
 				continue
 
 			if DEBUG:

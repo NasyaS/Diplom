@@ -13,6 +13,7 @@ def to_deg(value):
 	return degs[0] + (degs[1]/60.0) + (degs[2] / 3600.0)
 
 def getlatlngs(info):
+	lat, lng = None, None
 	exif_data = {}
 	targets, g = ["GPSLatitude", 'GPSLatitudeRef', 'GPSLongitude', 'GPSLongitudeRef'], "GPSInfo"
 	if not info: return
