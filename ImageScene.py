@@ -67,6 +67,7 @@ class ImageScene():
 		self.current = QGraphicsScene(0, 0, self.pixmap.size().width(), self.pixmap.size().height())
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
 		self.drawing = True
+		self.exif = None
 		if image._getexif():
 			self.exif = {
 				ExifTags.TAGS[k]: v
@@ -89,6 +90,6 @@ class ImageScene():
 		self.go_enbl = True
 
 	def getLatLng(self):
-		return getlatlngs(self.exif)
+		return getlatlngs(self.exif) if self.exif else None, None
 
 
