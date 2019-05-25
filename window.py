@@ -203,6 +203,7 @@ class Window(QMainWindow):
 		for item in file: result.append(item.split(':'))
 		cnt = 1
 		if file[0] == '': return self.throwerror("Файл пуст")
+		self.view.clear()
 		for item in result:
 			if item[0] == '': continue
 			self.view.addMarker(item[0], float(item[1]), float(item[2]))
@@ -388,6 +389,7 @@ class Window(QMainWindow):
 	def calc(self):
 		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
 		self.view.removeCircles()
+		self.view.removefakes(len(self.scenes))
 		self.model.clear()
 		pheight = 1.65
 
@@ -396,7 +398,13 @@ class Window(QMainWindow):
 
 		for key in self.scenes:
 
-			if not self.scenes[key].good(): return
+			if not self.scenes[key].good():
+				self.throwerror("Не готова сцена "+key)
+				continue
+
+			if not self.scenes[key].exif:
+				self.throwerror("Не найден exif файл в изображении "+key)
+				continue
 
 			if DEBUG:
 				obj = self.scenes[key]

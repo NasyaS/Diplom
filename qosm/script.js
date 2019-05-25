@@ -108,13 +108,18 @@ function osm_removeCircle(key){
     delete circles[key];
 }
 
-function osm_rmCircles(mc){
+function osm_rmfakes(mc){
     var marr = []
-    for (var i = mc-1; i <=10; i++){
+    for (var i = mc+1; i <=10; i++){
         marr.push("Mark "+i)
     }
     for (key in markers){
         if (marr.includes(key)) mymap.removeLayer(markers[key])
+    }
+}
+
+function osm_rmCircles(mc){
+    for (key in markers){
         if (circles[key]) mymap.removeLayer(circles[key]);
     }
 }

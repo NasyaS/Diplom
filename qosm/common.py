@@ -110,6 +110,9 @@ class QOSM(QWebEngineView):
                                          "latitude= {}, "
                                          "longitude= {}, {});".format(key, latitude, longitude, json.dumps(extra)))
 
+    def removefakes(self, skey):
+        return self.page().runJavaScript("osm_rmfakes({})".format(skey))
+
     def removeMarker(self, key):
         return self.page().runJavaScript("osm_deleteMarker(key={!r});".format(key))
 
