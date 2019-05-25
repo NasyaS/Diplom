@@ -204,6 +204,7 @@ class Window(QMainWindow):
 		cnt = 1
 		if file[0] == '': return self.throwerror("Файл пуст")
 		self.view.clear()
+		self.model.clear()
 		for item in result:
 			if item[0] == '': continue
 			self.view.addMarker(item[0], float(item[1]), float(item[2]))
