@@ -90,6 +90,6 @@ class ImageScene():
 		self.go_enbl = True
 
 	def getLatLng(self):
-		return getlatlngs(self.exif) if self.exif else None, None
+		return getlatlngs(self.exif) if self.exif else (None, None)
 
 
