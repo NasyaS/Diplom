@@ -2,7 +2,7 @@ import sys, os
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 import cv2
-from window import Window
+from lib.window import Window
 
 LOG_QT_WARNINGS = False
 

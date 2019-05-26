@@ -3,7 +3,7 @@ from PyQt5.QtGui import QBrush, QPen, QPixmap
 from PyQt5.QtWidgets import QGraphicsPixmapItem, QGraphicsScene
 from PyQt5 import QtCore
 from PyQt5.QtCore import QSize, Qt
-from GpsInfo import getlatlngs
+from lib.GpsInfo import getlatlngs
 import numpy as np
 
 

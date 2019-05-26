@@ -15,10 +15,10 @@ from PIL.ImageQt import ImageQt
 import cv2
 import qosm
 from qosm.common import QOSM
-from mathlogic import distance
-from ImageScene import ImageScene
-from TableModel import tableModel
-from AddDialog import AddDialog
+from lib.mathlogic import distance
+from lib.ImageScene import ImageScene
+from lib.TableModel import tableModel
+from lib.AddDialog import AddDialog
 
 #For debug only, delete later
 DEBUG = False
@@ -232,7 +232,7 @@ class Window(QMainWindow):
 			self.how.setText("?")
 		else:
 			self.how.setText("x")
-			with open("docs.bin") as f:
+			with open("data/docs.bin") as f:
 				string = f.read()
 			image = Image.open(BytesIO(base64.b64decode(string)))
 			qim = ImageQt(image)
@@ -267,11 +267,11 @@ class Window(QMainWindow):
 	def accept(self):
 		newkey = self.dialog.newName.text()
 		newvalue = self.dialog.newSize_l.text()+'x'+self.dialog.newSize_r.text()
-		with open('data.json') as f:
+		with open('data/data.json') as f:
 			data = json.loads(f.read())
 		if not newkey in data:
 			data[newkey] = newvalue
-		with open('data.json', 'w') as f:
+		with open('data/data.json', 'w') as f:
 			json.dump(data, f)
 		self.loadjson()
 
@@ -324,7 +324,7 @@ class Window(QMainWindow):
 
 	def loadjson(self):
 		self.matrix.clear()
-		with open('data.json') as f:
+		with open('data/data.json') as f:
 			self.matrixList = json.loads(f.read())
 		self.matrix.addItems(self.matrixList.keys())
 
