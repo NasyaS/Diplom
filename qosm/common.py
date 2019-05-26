@@ -13,7 +13,7 @@ from PyQt5.QtWebEngineWidgets import (QWebEnginePage, QWebEngineScript,
 from PyQt5.QtWidgets import QLabel, QMainWindow, QPushButton
 from PyQt5.uic import loadUi
 
-doTrace = True
+doTrace = False
 
 path = os.path.abspath(__file__)[:-9]
 
