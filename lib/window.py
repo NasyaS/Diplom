@@ -13,7 +13,6 @@ from PIL import Image
 from PIL.ImageQt import ImageQt
 
 import cv2
-import qosm
 from qosm.common import QOSM
 from lib.mathlogic import distance
 from lib.ImageScene import ImageScene
