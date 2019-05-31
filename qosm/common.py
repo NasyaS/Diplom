@@ -140,7 +140,6 @@ class QOSM(QWebEngineView):
         for item in self.creature:
             if item[0] == key:
                 item[1], item[2] = lat, lng
-        print(self.creature)
         self.markerMoved.emit(key, lat, lng)
 
     @pyqtSlot(str, float, float)
