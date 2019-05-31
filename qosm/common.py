@@ -64,7 +64,7 @@ class QOSM(QWebEngineView):
         self.loadFinished.connect(self.onLoadFinished)
 
     def checkConnection(self):
-        Remote = "openstreermap.ru"
+        Remote = "openstreetmap.ru"
         try:
             host = socket.gethostbyname(Remote)
             s = socket.create_connection((host, 80), 2)
