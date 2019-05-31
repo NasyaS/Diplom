@@ -1,9 +1,5 @@
-import functools
-import json
-import os
-import sys
+import functools, json, sys, os, socket, decorator
 
-import decorator
 from PyQt5 import QtCore, QtGui, QtNetwork, QtWebChannel, QtWidgets #QJsonArray, QJsonValue
 from PyQt5.QtCore import QObject, QSize, Qt, QUrl, pyqtSignal, pyqtSlot, QJsonValue
 from PyQt5.QtNetwork import QNetworkAccessManager, QNetworkDiskCache
@@ -48,6 +44,8 @@ class QOSM(QWebEngineView):
     markerDoubleClicked = pyqtSignal(str, float, float)
     markerRightClicked = pyqtSignal(str, float, float)
 
+    connectionErr = pyqtSignal()
+
 
     def __init__(self, parent):
         super(QOSM, self).__init__(parent)
@@ -64,6 +62,15 @@ class QOSM(QWebEngineView):
             HTML = f.read()
         self.setHtml(HTML)
         self.loadFinished.connect(self.onLoadFinished)
+
+    def checkConnection(self):
+        Remote = "openstreermap.ru"
+        try:
+            host = socket.gethostbyname(Remote)
+            s = socket.create_connection((host, 80), 2)
+        except:
+            self.connectionErr.emit()
+
 
     def onLoadFinished(self):
         with open(path+'qwebchannel.js') as f:

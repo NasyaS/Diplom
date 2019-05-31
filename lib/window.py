@@ -50,6 +50,7 @@ class Window(QMainWindow):
 		self.checkscene = ImageScene()
 		self.canvas_2.setScene(self.checkscene.current)
 		self.setGroupVis(False)
+		self.view.checkConnection()
 
 ###### Signals and Slots Block
 
@@ -66,6 +67,10 @@ class Window(QMainWindow):
 		self.canvas_2.dragEnterEvent = self.dEE
 		self.canvas_2.dragMoveEvent = self.dME
 		self.view.mapClicked.connect(self.onMapLClick)
+		self.view.connectionErr.connect(self.noncon)
+
+	def noncon(self):
+		self.throwerror("Ошибка подключения к интернету")
 
 	def dEE(self, event):
 		if event.mimeData().hasUrls:
@@ -275,6 +280,7 @@ class Window(QMainWindow):
 		self.loadjson()
 
 	def onTabChange(self, i):
+		if i == 2: self.view.checkConnection()
 		if i != 0:
 			self.groupBox.setVisible(False)
 			self.groupBox_2.setVisible(True)
