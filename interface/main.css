@@ -162,6 +162,7 @@ QTabBar::tab:selected, QTabBar::tab:hover {
     height: 30px;
 }
 
+
 QPushButton#one{
 	background: white;
 	border-radius: 0px;

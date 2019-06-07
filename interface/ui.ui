@@ -119,7 +119,7 @@
                 <bool>true</bool>
                </property>
                <property name="placeholderText">
-                <string>Путь к файлу</string>
+                <string>Имя файла</string>
                </property>
               </widget>
              </item>
@@ -296,6 +296,12 @@ QTableView::item {
 }
 </string>
          </property>
+         <attribute name="horizontalHeaderDefaultSectionSize">
+          <number>50</number>
+         </attribute>
+         <attribute name="horizontalHeaderMinimumSectionSize">
+          <number>50</number>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -323,7 +329,7 @@ QTableView::item {
        </property>
        <widget class="QWidget" name="tabPhoto">
         <attribute name="title">
-         <string>Расчёт</string>
+         <string>Фотографии</string>
         </attribute>
         <widget class="QGraphicsView" name="canvas">
          <property name="geometry">
@@ -428,7 +434,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
        </widget>
        <widget class="QWidget" name="tab">
         <attribute name="title">
-         <string>Уточнить</string>
+         <string>Уточнение</string>
         </attribute>
         <widget class="QGraphicsView" name="canvas_2">
          <property name="geometry">
@@ -510,7 +516,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
      </size>
     </property>
     <property name="title">
-     <string>Проверка</string>
+     <string>Уточнение</string>
     </property>
     <widget class="QWidget" name="verticalLayoutWidget_2">
      <property name="geometry">
@@ -518,7 +524,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
        <x>0</x>
        <y>20</y>
        <width>241</width>
-       <height>231</height>
+       <height>291</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -558,7 +564,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
          <bool>true</bool>
         </property>
         <property name="placeholderText">
-         <string>Путь к файлу</string>
+         <string>Имя файла</string>
         </property>
        </widget>
       </item>
@@ -593,7 +599,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Загрузить состояние</string>
+         <string>Загрузить область</string>
         </property>
        </widget>
       </item>
@@ -606,7 +612,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
          <string notr="true"/>
         </property>
         <property name="text">
-         <string>Сохранить состояние</string>
+         <string>Сохранить область</string>
         </property>
        </widget>
       </item>
@@ -617,6 +623,45 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
         </property>
         <property name="text">
          <string>Уточнить результат</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Координаты</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lat">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>Широта</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLineEdit" name="lng">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>30</height>
+         </size>
+        </property>
+        <property name="readOnly">
+         <bool>true</bool>
+        </property>
+        <property name="placeholderText">
+         <string>Долгота</string>
         </property>
        </widget>
       </item>

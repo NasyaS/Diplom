@@ -3,7 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 
 from lib.window import Window
 
-LOG_QT_WARNINGS = False
+LOG_QT_WARNINGS = True
 
 if not LOG_QT_WARNINGS:
 	QtCore.qInstallMessageHandler(lambda x,y,z: None)

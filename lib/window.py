@@ -1,18 +1,15 @@
-import math, sys, json
+import os, sys, json, cv2, base64, numpy as np
 
-import numpy as np
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import QSize, Qt, pyqtSlot, QTimer, QPropertyAnimation, QRect
+from PyQt5.QtCore import QSize, Qt, pyqtSlot, QTimer, QPropertyAnimation, QRect, QDir
 from PyQt5.QtGui import QBrush, QPen, QPixmap
 from PyQt5.QtWidgets import (QFileDialog, QGraphicsPixmapItem, QTableWidgetItem, QGraphicsView, QGraphicsScene, QDialogButtonBox,
 							 QLabel, QMainWindow, QPushButton, QDialog)
 from PyQt5.uic import loadUi
-import base64
 from io import BytesIO
 from PIL import Image
 from PIL.ImageQt import ImageQt
 
-import cv2
 from qosm.common import QOSM
 from lib.mathlogic import distance
 from lib.ImageScene import ImageScene
@@ -20,7 +17,7 @@ from lib.TableModel import tableModel
 from lib.AddDialog import AddDialog
 
 #For debug only, delete later
-DEBUG = False
+DEBUG = True
 
 class Window(QMainWindow):
 
@@ -37,7 +34,7 @@ class Window(QMainWindow):
 		self.loadjson()
 		self.imgs_l.setAlignment(Qt.AlignLeft)
 		self.canvas_sz = (self.canvas.geometry().width(), self.canvas.geometry().height())
-		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние (м)'])
+		self.model = tableModel(self.tableWidget, 2, ['Номер', 'Расстояние (м)'], "Расстояние от места сьёмки до ориентира")
 		self.tableWidget.horizontalHeader().setStretchLastSection(True)
 		self.matrix.setView(QtWidgets.QListView())
 		self.canvas.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
@@ -51,6 +48,7 @@ class Window(QMainWindow):
 		self.canvas_2.setScene(self.checkscene.current)
 		self.setGroupVis(False)
 		self.view.checkConnection()
+		self.tabWidget.setCurrentIndex(0)
 
 ###### Signals and Slots Block
 
@@ -107,7 +105,9 @@ class Window(QMainWindow):
 			event.ignore()
 
 	def drawmode2(self, event):
-		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
+		QF = QFileDialog()
+		QF.setDirectory(QDir(os.environ.get('systemdrive')+"/Users/"+os.environ.get('username')+"/Pictures")) 
+		temp = QF.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
 		if not temp: return
 		self.load_image(temp, self.checkscene, self.canvas_2, self.path_2, 0)
 		self.check.setEnabled(True)
@@ -171,7 +171,9 @@ class Window(QMainWindow):
 				
 
 	def open_dialog(self):
-		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
+		QF = QFileDialog()
+		QF.setDirectory(QDir(os.environ.get('systemdrive')+"/Users/"+os.environ.get('username')+"/Pictures")) 
+		temp = QF.getOpenFileName(self, 'Open file', '', 'Images (*.png *.jpg *jpeg)')[0]
 		if temp: self.load_image(temp, self.scene, self.canvas, self.path)
 
 	@pyqtSlot()
@@ -199,7 +201,7 @@ class Window(QMainWindow):
 
 	@pyqtSlot()
 	def on_load_clicked(self):
-		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Osm Files (*.osm)')[0]
+		temp = QF.getOpenFileName(self, 'Open file', '', 'Osm Files (*.osm)')[0]
 		if not temp: return
 		with open(temp) as f:
 			file = f.read()
@@ -217,6 +219,10 @@ class Window(QMainWindow):
 				self.view.addCircle(float(item[3]), item[0])
 				self.model.insert([str(cnt),float(item[3])])
 			cnt+=1
+		result.remove([""])
+		res = np.mean((np.array(result).T[1:3]).astype(float), axis = 1)
+		self.view.centerAt(*res)
+		self.tabWidget.setCurrentIndex(2)
 
 	@pyqtSlot()
 	def on_check_clicked(self):
@@ -225,6 +231,8 @@ class Window(QMainWindow):
 			self.tabWidget.setCurrentIndex(2)
 			self.view.addMarker("check", lat, lng)
 			self.view.centerAt(lat, lng)
+			self.lat.setText(str(lat))
+			self.lng.setText(str(lng))
 		else:
 			self.throwerror("GPS теги не обнаружены")
 
@@ -347,7 +355,9 @@ class Window(QMainWindow):
 	def load_image(self, file_name, scene, canvas, path, noblock = 1):
 		canvas.resize(*self.canvas_sz)
 		scene.load(file_name, canvas, self.matrix)
-		path.setText(file_name)
+		file_name = file_name.split('/')
+		print("loading", file_name)
+		path.setText(file_name[len(file_name)-1])
 		if scene.getSize()[0] > self.canvas_sz[0]:
 			canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
 		canvas.setScene(scene.current)
@@ -383,7 +393,8 @@ class Window(QMainWindow):
 			self.canvas.setGeometry(0,0, *self.scene.getSize())
 		self.height.setValue(self.scene.height)
 		self.matrix.setCurrentIndex(self.scene.comboindex)
-		self.path.setText(self.scene.path)
+		file_name = self.scene.path.split('/')
+		path.setText(file_name[len(file_name)-1])
 
 	def checkmarkers(self):
 		counter = 0
@@ -394,6 +405,7 @@ class Window(QMainWindow):
 ###### Calculation Block
 
 	def calc(self):
+		self.tabWidget.setCurrentIndex(2)
 		self.scene.setHeight(self.height.value(), self.matrix.currentIndex())
 		self.view.removeCircles()
 		self.view.removefakes(len(self.scenes))
