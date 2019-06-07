@@ -79,7 +79,7 @@
               <x>0</x>
               <y>20</y>
               <width>241</width>
-              <height>321</height>
+              <height>381</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -524,7 +524,7 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
        <x>0</x>
        <y>20</y>
        <width>241</width>
-       <height>291</height>
+       <height>371</height>
       </rect>
      </property>
      <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -628,6 +628,12 @@ QScrollBar::left-arrow:horizontal, QScrollBar::right-arrow:horizontal{
       </item>
       <item>
        <widget class="QLabel" name="label">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>20</height>
+         </size>
+        </property>
         <property name="text">
          <string>Координаты</string>
         </property>
