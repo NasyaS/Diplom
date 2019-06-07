@@ -17,7 +17,7 @@ from lib.TableModel import tableModel
 from lib.AddDialog import AddDialog
 
 #For debug only, delete later
-DEBUG = True
+DEBUG = False
 
 class Window(QMainWindow):
 
@@ -201,7 +201,7 @@ class Window(QMainWindow):
 
 	@pyqtSlot()
 	def on_load_clicked(self):
-		temp = QF.getOpenFileName(self, 'Open file', '', 'Osm Files (*.osm)')[0]
+		temp = QFileDialog.getOpenFileName(self, 'Open file', '', 'Osm Files (*.osm)')[0]
 		if not temp: return
 		with open(temp) as f:
 			file = f.read()
