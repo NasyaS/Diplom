@@ -394,7 +394,7 @@ class Window(QMainWindow):
 		self.height.setValue(self.scene.height)
 		self.matrix.setCurrentIndex(self.scene.comboindex)
 		file_name = self.scene.path.split('/')
-		path.setText(file_name[len(file_name)-1])
+		self.path.setText(file_name[len(file_name)-1])
 
 	def checkmarkers(self):
 		counter = 0
