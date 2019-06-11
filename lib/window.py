@@ -356,7 +356,6 @@ class Window(QMainWindow):
 		canvas.resize(*self.canvas_sz)
 		scene.load(file_name, canvas, self.matrix)
 		file_name = file_name.split('/')
-		print("loading", file_name)
 		path.setText(file_name[len(file_name)-1])
 		if scene.getSize()[0] > self.canvas_sz[0]:
 			canvas.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
