@@ -68,14 +68,11 @@ class ImageScene():
 		self.current.addItem(QGraphicsPixmapItem(self.pixmap))
 		self.drawing = True
 		self.exif = None
-		if image._getexif():
-			self.exif = {
-				ExifTags.TAGS[k]: v
-					for k, v in image._getexif().items()
-					if k in ExifTags.TAGS
-			}
-			index = combo.findText(self.exif['Model'], QtCore.Qt.MatchFixedString)
-			if index >= 0: combo.setCurrentIndex(index)
+		exf = image._getexif()
+		if not exf: return
+		self.exif = {ExifTags.TAGS[k]: v for k, v in exf.items() if k in ExifTags.TAGS}
+		index = combo.findText(self.exif['Model'], QtCore.Qt.MatchFixedString)
+		if index >= 0: combo.setCurrentIndex(index)
 
 	def addPoint(self, x, y):
 		Pen = QtCore.Qt.red if not self.lenl else QtCore.Qt.green

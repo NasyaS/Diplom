@@ -1,6 +1,5 @@
 import sys, os
 from PyQt5 import QtCore, QtWidgets, QtGui
-
 from lib.window import Window
 
 LOG_QT_WARNINGS = False
