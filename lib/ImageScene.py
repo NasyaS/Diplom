@@ -71,6 +71,7 @@ class ImageScene():
 		exf = image._getexif()
 		if not exf: return
 		self.exif = {ExifTags.TAGS[k]: v for k, v in exf.items() if k in ExifTags.TAGS}
+		if not 'Model' in self.exif: return
 		index = combo.findText(self.exif['Model'], QtCore.Qt.MatchFixedString)
 		if index >= 0: combo.setCurrentIndex(index)
 
